@@ -1,26 +1,1141 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* =========================================================
+   GLOBAL RESET
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-width: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-x: none;
+
+  /*
+   * Keep native scrolling enabled for ScrollSmoother.
+   * Only the visual scrollbar is hidden.
+   */
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Chrome / Edge / Safari */
+html::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #f3f2ed;
+
+  /*
+   * Do not use overflow:hidden or scroll-behavior here.
+   * ScrollSmoother relies on the browser's native document scroll.
+   */
+  overflow-x: hidden;
+  overflow-y: visible;
+
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Chrome / Edge / Safari */
+body::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}
+
+
+/* =========================================================
+   SYSTEM VISUALS
+   ========================================================= */
+
+.system-visuals-section {
+  position: relative;
+
+  width: 100%;
+
+  min-height: 100vh;
+
+  background: #f3f2ed;
+
+  overflow: visible;
+}
+
+.system-visuals-stage {
+  position: relative;
+
+  width: 100%;
+
+  min-height: 100vh;
+
+  background: #f3f2ed;
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   MAIN COMPOSITION
+   ========================================================= */
+
+.system-visuals-layout {
+  position: relative;
+
+  width: calc(
+    100% - 54px
+  );
+
+  height: 100vh;
+
+  min-height: 680px;
+
+  margin: 0 auto;
+
+  padding:
+    66px 0
+    72px;
+
+  display: grid;
+
+  grid-template-columns:
+    478px
+    minmax(0, 1fr);
+
+  column-gap: 32px;
+
+  align-items: stretch;
+}
+
+
+/* =========================================================
+   FULL VISUAL CANVAS
+   ========================================================= */
+
+.system-visuals-visual {
+  position: absolute;
+
+  top: 66px;
+  left: 0;
+
+  width: 100%;
+
+  height: calc(
+    100vh - 138px
+  );
+
+  z-index: 1;
+
+  pointer-events: none;
+
+  overflow: visible;
+
+  isolation: isolate;
+}
+
+
+/* =========================================================
+   LARGE LEFT IMAGE
+   ========================================================= */
+
+.system-visuals-image--hero {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 478px;
+  height: 100%;
+
+  overflow: hidden;
+
+  border-radius: 17px;
+
+  z-index: 1;
+
+  transform-origin:
+    center center;
+
+  will-change:
+    transform,
+    opacity;
+}
+
+.system-visuals-image--hero img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  user-select: none;
+
+  -webkit-user-drag: none;
+}
+
+
+/* =========================================================
+   SMALL RIGHT IMAGE
+   ========================================================= */
+
+.system-visuals-image--system {
+  position: absolute;
+
+  right: 0;
+  bottom: 0;
+
+  width: 240px;
+  height: 260px;
+
+  overflow: hidden;
+
+  border-radius: 16px;
+
+  z-index: 4;
+
+  pointer-events: none;
+
+  transform-origin:
+    bottom right;
+
+  will-change:
+    transform,
+    opacity;
+}
+
+.system-visuals-image--system img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  user-select: none;
+
+  -webkit-user-drag: none;
+}
+
+
+/* =========================================================
+   RIGHT CONTENT COLUMN
+   ========================================================= */
+
+.system-visuals-intro {
+  position: relative;
+
+  grid-column: 2;
+  grid-row: 1;
+
+  z-index: 20;
+
+  min-width: 0;
+  min-height: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+
+  padding:
+    15px 0 0;
+}
+
+.system-visuals-intro-top {
+  position: relative;
+
+  z-index: 25;
+}
+
+
+/* =========================================================
+   EYEBROW
+   ========================================================= */
+
+.system-visuals-eyebrow {
+  display: inline-flex;
+
+  align-items: center;
+
+  width: fit-content;
+
+  margin:
+    0 0 17px;
+
+  padding:
+    7px 10px;
+
+  border:
+    1px solid
+    rgba(
+      17,
+      17,
+      17,
+      0.10
+    );
+
+  border-radius: 7px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.55
+    );
+
+  font-size: 11px;
+
+  line-height: 1;
+
+  font-weight: 400;
+
+  letter-spacing:
+    -0.01em;
+
+  color: #333333;
+
+  will-change:
+    transform,
+    opacity;
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.system-visuals-title {
+  width: 100%;
+
+  max-width: 620px;
+
+  margin: 0;
+
+  font-size: clamp(
+    48px,
+    3.45vw,
+    64px
+  );
+
+  line-height: 0.94;
+
+  font-weight: 400;
+
+  letter-spacing:
+    -0.067em;
+
+  color: #111111;
+
+  will-change:
+    transform,
+    opacity;
+}
+
+
+/* =========================================================
+   CONTROLS
+   ========================================================= */
+
+.system-visuals-controls {
+  position: absolute;
+
+  top: 178px;
+
+  left: 510px;
+
+  z-index: 40;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  width: fit-content;
+
+  will-change:
+    transform,
+    opacity;
+}
+
+
+/* =========================================================
+   CONTROL BUTTON
+   ========================================================= */
+
+.system-visuals-control {
+  position: relative;
+
+  width: 51px;
+  height: 51px;
+
+  padding: 0;
+
+  display: grid;
+
+  place-items: center;
+
+  border:
+    1px solid
+    rgba(
+      17,
+      17,
+      17,
+      0.08
+    );
+
+  border-radius: 11px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.78
+    );
+
+  color: #777777;
+
+  cursor: pointer;
+
+  appearance: none;
+
+  touch-action: manipulation;
+
+  transition:
+    background 220ms ease,
+    color 220ms ease,
+    transform 220ms ease;
+}
+
+.system-visuals-control:hover {
+  transform:
+    translateY(-2px);
+}
+
+.system-visuals-control.is-active {
+  background: #ffffff;
+
+  color: #111111;
+
+  box-shadow:
+    0 2px 10px
+    rgba(
+      0,
+      0,
+      0,
+      0.035
+    );
+}
+
+
+/* =========================================================
+   GRID ICON
+   ========================================================= */
+
+.system-visuals-grid-icon {
+  width: 15px;
+  height: 15px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 3px;
+}
+
+.system-visuals-grid-icon i {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  border-radius: 2px;
+
+  background:
+    currentColor;
+}
+
+
+/* =========================================================
+   EYE ICON
+   ========================================================= */
+
+.system-visuals-eye {
+  position: relative;
+
+  width: 20px;
+  height: 13px;
+
+  border:
+    1.5px solid
+    currentColor;
+
+  border-radius:
+    100% 0
+    100% 0;
+
+  transform:
+    rotate(45deg);
+}
+
+.system-visuals-eye span {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background:
+    currentColor;
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    );
+}
+
+
+/* =========================================================
+   BOTTOM CONTENT
+   ========================================================= */
+
+.system-visuals-intro-bottom {
+  position: relative;
+
+  z-index: 30;
+
+  width: 100%;
+
+  max-width: 355px;
+
+  margin: 0;
+
+  padding:
+    0 0 2px;
+}
+
+.system-visuals-feature-title {
+  margin:
+    0 0 11px;
+
+  font-size: 24px;
+
+  line-height: 1;
+
+  font-weight: 400;
+
+  letter-spacing:
+    -0.045em;
+
+  color: #111111;
+}
+
+.system-visuals-description {
+  max-width: 315px;
+
+  margin: 0;
+
+  font-size: 13px;
+
+  line-height: 1.48;
+
+  font-weight: 400;
+
+  letter-spacing:
+    -0.015em;
+
+  color: #929292;
+
+  will-change:
+    transform,
+    opacity;
+}
+
+
+/* =========================================================
+   LEARN MORE
+   ========================================================= */
+
+.system-visuals-learn-more {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  height: 37px;
+
+  margin-top: 20px;
+
+  padding:
+    0 5px
+    0 13px;
+
+  border:
+    1px solid
+    rgba(
+      17,
+      17,
+      17,
+      0.08
+    );
+
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  font-size: 11px;
+
+  line-height: 1;
+
+  color: #222222;
+
+  cursor: pointer;
+
+  touch-action: manipulation;
+}
+
+.system-visuals-learn-arrow {
+  width: 27px;
+  height: 27px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 6px;
+
+  background: #111111;
+
+  color: #ffffff;
+
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+   ========================================================= */
+
+@media (min-width: 1600px) {
+  .system-visuals-layout {
+    width: calc(
+      100% - 54px
+    );
+
+    grid-template-columns:
+      478px
+      minmax(0, 1fr);
+
+    column-gap: 32px;
+
+    padding:
+      66px 0
+      72px;
+  }
+
+  .system-visuals-visual {
+    top: 66px;
+
+    height: calc(
+      100vh - 138px
+    );
+  }
+
+  .system-visuals-image--hero {
+    width: 478px;
+  }
+
+  .system-visuals-image--system {
+    width: 240px;
+    height: 260px;
+  }
+
+  .system-visuals-controls {
+    left: 510px;
+
+    top: 178px;
+  }
+
+  .system-visuals-title {
+    font-size: 64px;
+  }
+}
+
+
+/* =========================================================
+   VERY WIDE DESKTOP
+   ========================================================= */
+
+@media (min-width: 1800px) {
+  .system-visuals-layout {
+    grid-template-columns:
+      478px
+      minmax(0, 1fr);
+  }
+
+  .system-visuals-image--hero {
+    width: 478px;
+  }
+
+  .system-visuals-controls {
+    left: 510px;
+  }
+
+  .system-visuals-title {
+    font-size: 64px;
+  }
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1199px) {
+  .system-visuals-section {
+    overflow: hidden;
+  }
+
+  .system-visuals-stage {
+    min-height: auto;
+
+    overflow: visible;
+
+    padding:
+      80px 0
+      90px;
+  }
+
+  .system-visuals-layout {
+    width: min(
+      900px,
+      calc(100% - 48px)
+    );
+
+    height: auto;
+
+    min-height: auto;
+
+    padding: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 30px;
+  }
+
+  .system-visuals-intro {
+    order: 1;
+
+    min-height: auto;
+
+    padding: 0;
+  }
+
+  .system-visuals-controls {
+    position: relative;
+
+    top: auto;
+    left: auto;
+
+    order: 2;
+
+    margin-top: 24px;
+  }
+
+  .system-visuals-intro-bottom {
+    order: 3;
+
+    max-width: 575px;
+
+    margin-top: 34px;
+  }
+
+  .system-visuals-visual {
+    position: relative;
+
+    top: auto;
+    left: auto;
+
+    order: 4;
+
+    width: 100%;
+
+    height: 650px;
+
+    min-height: 0;
+  }
+
+  .system-visuals-image--hero {
+    width: 100%;
+    height: 100%;
+  }
+
+  .system-visuals-image--system {
+    right: 0;
+    bottom: 0;
+
+    width: 30%;
+    height: 42%;
+  }
+
+  .system-visuals-description {
+    max-width: 100%;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 767px) {
+  .system-visuals-stage {
+    padding:
+      60px 0
+      70px;
+  }
+
+  .system-visuals-layout {
+    width: calc(
+      100% - 28px
+    );
+
+    gap: 25px;
+  }
+
+  .system-visuals-title {
+    font-size: clamp(
+      42px,
+      13.5vw,
+      64px
+    );
+
+    line-height: 0.91;
+  }
+
+  .system-visuals-eyebrow {
+    margin-bottom: 14px;
+
+    font-size: 10px;
+  }
+
+  .system-visuals-controls {
+    margin-top: 20px;
+
+    gap: 7px;
+  }
+
+  .system-visuals-control {
+    width: 45px;
+    height: 45px;
+
+    border-radius: 9px;
+  }
+
+  .system-visuals-intro-bottom {
+    margin-top: 28px;
+
+    max-width: 100%;
+  }
+
+  .system-visuals-feature-title {
+    font-size: 21px;
+  }
+
+  .system-visuals-description {
+    max-width: 100%;
+
+    font-size: 12px;
+  }
+
+  .system-visuals-visual {
+    height: 105vw;
+
+    min-height: 340px;
+
+    max-height: 520px;
+  }
+
+  .system-visuals-image--hero {
+    border-radius: 17px;
+  }
+
+  .system-visuals-image--system {
+    width: 34%;
+    height: 40%;
+
+    border-radius: 13px;
+  }
+}
+
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 420px) {
+  .system-visuals-layout {
+    width: calc(
+      100% - 22px
+    );
+  }
+
+  .system-visuals-title {
+    font-size: 42px;
+  }
+
+  .system-visuals-visual {
+    height: 108vw;
+
+    min-height: 315px;
+  }
+
+  .system-visuals-image--system {
+    width: 36%;
+    height: 39%;
+  }
+}
+/* =========================================================
+   GSAP SCROLLSMOOTHER
+   ========================================================= */
+
+/*
+ * ScrollSmoother keeps native document scrolling and transforms
+ * the #smooth-content element to create the smooth catch-up.
+ *
+ * IMPORTANT:
+ * - #smooth-wrapper is the viewport.
+ * - #smooth-content is the only transformed content element.
+ * - Fixed elements such as Intro and CustomScrollBar stay OUTSIDE
+ *   this wrapper in layout.tsx.
+ *
+ * This follows the official ScrollSmoother structure.
+ */
+
+#smooth-wrapper,
+.smooth-wrapper {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  z-index: 1;
+}
+
+#smooth-content,
+.smooth-content {
+  position: relative;
+
+  width: 100%;
+  min-height: 100%;
+
+  overflow: visible;
+
+  /*
+   * ScrollSmoother applies its transform here.
+   * Do not add transition/scroll-behavior transforms.
+   */
+  will-change: transform;
+}
+
+/*
+ * Keep the page itself available as the native scrolling surface.
+ * ScrollSmoother/ScrollTrigger manage the relationship between
+ * native scrollTop and the transformed content.
+ */
+html {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body {
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+
+/* =========================================================
+   CUSTOM SCROLLBAR
+   ========================================================= */
+
+.custom-scrollbar {
+  position: fixed;
+
+  top: 10px;
+  right: 8px;
+
+  width: 4px;
+  height: calc(100vh - 20px);
+
+  z-index: 99999;
+
+  pointer-events: none;
+
+  overflow: hidden;
+
+  opacity: 0.72;
+
+  /*
+   * Keep the custom scrollbar completely independent from
+   * ScrollSmoother's transformed content.
+   */
+  transform: translateZ(0);
+}
+
+.custom-scrollbar-thumb {
+  position: absolute;
+
+  top: 0;
+  right: 0;
+
+  width: 4px;
+  min-height: 70px;
+
+  border-radius: 999px;
+
+  background: rgba(
+    17,
+    17,
+    17,
+    0.38
+  );
+
+  transform: translate3d(
+    0,
+    0,
+    0
+  );
+
+  will-change:
+    transform,
+    height;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 767px) {
+  .custom-scrollbar {
+    display: none;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  .custom-scrollbar {
+    display: none;
+  }
+}
+
+
+/* =========================================================
+   MOBILE GLOBAL SAFETY
+   ========================================================= */
+
+@media (max-width: 767px) {
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  body {
+    min-width: 0;
+  }
+
+  img,
+  video,
+  canvas,
+  svg {
+    max-width: 100%;
+  }
+
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button {
+    min-width: 0;
+  }
+
+  #smooth-content,
+  .smooth-content {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .system-visuals-section,
+  .about-section {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 390px) {
+  .system-visuals-layout {
+    width: calc(100% - 20px);
+  }
+
+  .system-visuals-title {
+    font-size: 40px;
+  }
+
+  .system-visuals-description {
+    font-size: 11.5px;
+    line-height: 1.45;
+  }
+
+  .system-visuals-visual {
+    height: 96vw;
+    min-height: 285px;
+  }
 }

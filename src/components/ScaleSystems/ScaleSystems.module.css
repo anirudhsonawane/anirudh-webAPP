@@ -1,0 +1,575 @@
+/* ============================================================
+   SCALE SYSTEMS — EDITORIAL SCROLL
+   ============================================================ */
+
+.section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: #f3f2ed;
+  color: #0b0b0b;
+}
+
+.stage {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  padding: 42px 28px 30px;
+  overflow: hidden;
+  background: #f3f2ed;
+}
+
+.container {
+  width: 100%;
+  max-width: 1480px;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.42fr);
+  gap: 70px;
+  align-items: end;
+  min-height: 205px;
+  padding: 0 8px 28px;
+}
+
+.headerCopy {
+  min-width: 0;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 11px;
+  border: 1px solid rgba(0, 0, 0, 0.13);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.65);
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.heading {
+  max-width: 720px;
+  margin: 21px 0 0;
+  font-size: clamp(50px, 6.2vw, 94px);
+  line-height: 0.88;
+  font-weight: 400;
+  letter-spacing: -0.065em;
+  color: #080808;
+  will-change: transform, opacity;
+}
+
+.intro {
+  max-width: 390px;
+  margin: 0 0 5px auto;
+  font-size: 14px;
+  line-height: 1.45;
+  font-weight: 400;
+  letter-spacing: -0.018em;
+  color: rgba(0, 0, 0, 0.52);
+  will-change: transform, opacity;
+}
+
+/* ============================================================
+   EDITORIAL PANELS — DESKTOP
+   ============================================================ */
+
+.panels {
+  display: flex;
+  width: 100%;
+  height: clamp(470px, 61vh, 650px);
+  min-height: 470px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.16);
+  border-radius: 17px;
+  background: #e9e9e6;
+}
+
+.panel {
+  position: relative;
+  flex: 0 0 19.3333%;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  border-right: 1px solid rgba(0, 0, 0, 0.17);
+  background: #f4f4f1;
+  will-change: flex-basis, opacity, transform;
+}
+
+.panel:last-child {
+  border-right: 0;
+}
+
+.panelTop {
+  position: absolute;
+  top: 15px;
+  left: 17px;
+  right: 17px;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.panelLabel {
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #111111;
+  will-change: transform, opacity;
+}
+
+.panelIndex {
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.38);
+}
+
+.numberWrap {
+  position: absolute;
+  top: 31px;
+  left: -7px;
+  right: -7px;
+  z-index: 2;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.giantNumber {
+  display: block;
+  width: max-content;
+  font-size: clamp(145px, 19vw, 325px);
+  line-height: 0.7;
+  font-weight: 700;
+  letter-spacing: -0.11em;
+  color: #050505;
+  white-space: nowrap;
+  will-change: transform, opacity;
+  transform-origin: 50% 50%;
+}
+
+/* ============================================================
+   CARD
+   ============================================================ */
+
+.panelCard {
+  position: absolute;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  top: 155px;
+  z-index: 4;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  will-change: transform;
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #dededb;
+  isolation: isolate;
+  will-change: transform;
+}
+
+.cardImage {
+  z-index: -2;
+  object-fit: cover;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+.cardOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.02) 0%,
+    rgba(0, 0, 0, 0.02) 45%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+}
+
+.cardContent {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 3;
+  padding: 18px;
+  color: #ffffff;
+}
+
+.cardLabel {
+  display: none;
+}
+
+.cardBottom {
+  display: block;
+}
+
+.cardTitle {
+  max-width: 520px;
+  margin: 0;
+  font-size: clamp(18px, 1.6vw, 27px);
+  line-height: 0.98;
+  font-weight: 500;
+  letter-spacing: -0.045em;
+}
+
+.cardDescription {
+  max-width: 400px;
+  margin: 9px 0 0;
+  font-size: 11px;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 1100px) and (min-width: 901px) {
+  .stage {
+    padding-inline: 20px;
+  }
+
+  .header {
+    grid-template-columns: minmax(0, 1fr) minmax(250px, 0.45fr);
+    gap: 35px;
+  }
+
+  .panels {
+    height: 570px;
+  }
+
+  .panelCard {
+    top: 135px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+  }
+
+  .giantNumber {
+    font-size: clamp(125px, 17vw, 245px);
+  }
+}
+
+/* ============================================================
+   MOBILE — IMMERSIVE CHAPTER STORY
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .section {
+    min-height: 100svh;
+  }
+
+  /*
+   * The pinned stage is intentionally viewport-sized.
+   * ScrollTrigger supplies the vertical travel while this
+   * composition remains visually stable.
+   */
+  .stage {
+    height: 100svh;
+    min-height: 560px;
+    padding: 24px 14px 16px;
+    overflow: hidden;
+  }
+
+  .container {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ----------------------------------------------------------
+     HEADER
+     ---------------------------------------------------------- */
+
+  .header {
+    display: block;
+    min-height: 0;
+    height: 29svh;
+    padding: 0 2px 14px;
+  }
+
+  .heading {
+    max-width: 100%;
+    margin-top: 17px;
+    font-size: clamp(43px, 12.7vw, 65px);
+    line-height: 0.89;
+  }
+
+  .intro {
+    max-width: 350px;
+    margin: 17px 0 0;
+    font-size: 12.5px;
+    line-height: 1.42;
+  }
+
+  .eyebrow {
+    padding: 7px 10px;
+    font-size: 9px;
+  }
+
+  /* ----------------------------------------------------------
+     STORY VIEWPORT
+     ---------------------------------------------------------- */
+
+  .panels {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 67svh;
+    min-height: 365px;
+    max-height: 610px;
+    overflow: hidden;
+    border: 0;
+    border-radius: 15px;
+    background: transparent;
+  }
+
+  .panel {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 15px;
+    background: #f4f4f1;
+    overflow: hidden;
+    will-change: transform, opacity;
+  }
+
+  .panel:last-child {
+    border-right: 1px solid rgba(0, 0, 0, 0.15);
+  }
+
+  /* ----------------------------------------------------------
+     PANEL TOP
+     ---------------------------------------------------------- */
+
+  .panelTop {
+    top: 13px;
+    left: 14px;
+    right: 14px;
+    z-index: 20;
+  }
+
+  .panelLabel {
+    font-size: 9px;
+    letter-spacing: 0.03em;
+  }
+
+  .panelIndex {
+    font-size: 9px;
+    color: rgba(0, 0, 0, 0.42);
+  }
+
+  /* ----------------------------------------------------------
+     GIANT NUMBER
+     ---------------------------------------------------------- */
+
+  .numberWrap {
+    top: 38px;
+    left: 3px;
+    right: auto;
+    z-index: 2;
+  }
+
+  .giantNumber {
+    font-size: clamp(150px, 48vw, 245px);
+    line-height: 0.68;
+    letter-spacing: -0.12em;
+  }
+
+  /* ----------------------------------------------------------
+     IMAGE CARD
+     ---------------------------------------------------------- */
+
+  .panelCard {
+    top: 132px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    z-index: 5;
+    border-radius: 11px;
+  }
+
+  .card {
+    border-radius: 11px;
+  }
+
+  .cardContent {
+    padding: 15px;
+  }
+
+  .cardTitle {
+    max-width: 92%;
+    font-size: clamp(19px, 5.1vw, 24px);
+    line-height: 0.96;
+  }
+
+  .cardDescription {
+    max-width: 88%;
+    margin-top: 8px;
+    font-size: 11px;
+    line-height: 1.38;
+  }
+
+  /*
+   * Keep the image itself calm while the card moves.
+   * GSAP handles the actual scale during the chapter transition.
+   */
+  .cardImage {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* ============================================================
+   SMALL PHONES
+   ============================================================ */
+
+@media (max-width: 560px) {
+  .stage {
+    min-height: 520px;
+    padding: 20px 11px 12px;
+  }
+
+  .header {
+    height: 30svh;
+    padding-bottom: 10px;
+  }
+
+  .heading {
+    margin-top: 15px;
+    font-size: clamp(40px, 12.9vw, 58px);
+  }
+
+  .intro {
+    max-width: 315px;
+    margin-top: 15px;
+    font-size: 12px;
+  }
+
+  .panels {
+    height: 66svh;
+    min-height: 350px;
+    border-radius: 13px;
+  }
+
+  .panel {
+    border-radius: 13px;
+  }
+
+  .panelTop {
+    top: 12px;
+    left: 12px;
+    right: 12px;
+  }
+
+  .numberWrap {
+    top: 36px;
+    left: 2px;
+  }
+
+  .giantNumber {
+    font-size: clamp(140px, 47vw, 220px);
+  }
+
+  .panelCard {
+    top: 123px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    border-radius: 10px;
+  }
+
+  .card {
+    border-radius: 10px;
+  }
+
+  .cardContent {
+    padding: 13px;
+  }
+
+  .cardTitle {
+    font-size: 18px;
+  }
+
+  .cardDescription {
+    margin-top: 7px;
+    font-size: 10.5px;
+  }
+}
+
+/* ============================================================
+   VERY SMALL PHONES
+   ============================================================ */
+
+@media (max-width: 390px) {
+  .stage {
+    padding-inline: 10px;
+  }
+
+  .heading {
+    font-size: 39px;
+  }
+
+  .intro {
+    font-size: 11.5px;
+  }
+
+  .panels {
+    height: 65svh;
+    min-height: 335px;
+  }
+
+  .giantNumber {
+    font-size: 142px;
+  }
+
+  .panelCard {
+    top: 118px;
+  }
+
+  .cardTitle {
+    font-size: 17px;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .heading,
+  .intro,
+  .panel,
+  .giantNumber,
+  .panelLabel,
+  .panelIndex,
+  .card,
+  .cardImage,
+  .cardContent {
+    transition: none !important;
+  }
+}

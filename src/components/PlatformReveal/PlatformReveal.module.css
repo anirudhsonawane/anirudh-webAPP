@@ -1,0 +1,830 @@
+/* =========================================================
+   PLATFORM REVEAL
+   ========================================================= */
+
+.section {
+  position: relative;
+
+  width: 100%;
+  height: 100vh;
+  min-height: 640px;
+
+  overflow: hidden;
+
+  background: #f8f8f6;
+}
+
+.container {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 0;
+}
+
+
+/* =========================================================
+   MAIN IMAGE
+   =========================================================
+   Desktop geometry follows the reference:
+   - left: ~2.5vw
+   - top: ~16vh
+   - bottom: ~9vh
+   - width: ~42vw
+   ========================================================= */
+
+.mainImage {
+  position: absolute;
+
+  left: 2.5vw;
+  top: 16.25vh;
+  bottom: 9.1vh;
+
+  width: 41.9vw;
+  height: auto;
+
+  min-height: 0;
+
+  overflow: hidden;
+
+  border-radius: 0 0 14px 14px;
+
+  clip-path: inset(0% 0% 100% 0%);
+
+  transform: translateZ(0);
+
+  will-change: clip-path;
+
+  z-index: 1;
+}
+
+.mainImage img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transform: scale(1.06);
+
+  transform-origin: center center;
+
+  will-change: transform;
+
+  backface-visibility: hidden;
+
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+
+/* =========================================================
+   RIGHT CONTENT
+   =========================================================
+   Reference alignment:
+   - starts around 47vw
+   - eyebrow near 5vh
+   - right breathing room ~2vw
+   ========================================================= */
+
+.content {
+  position: absolute;
+
+  top: 5.1vh;
+  left: 47.2vw;
+  right: 2.2vw;
+
+  width: auto;
+  height: 85.8vh;
+
+  z-index: 5;
+}
+
+
+/* =========================================================
+   EYEBROW
+   ========================================================= */
+
+.eyebrow {
+  display: inline-flex;
+
+  align-items: center;
+
+  width: fit-content;
+
+  padding: 7px 10px;
+
+  border: 1px solid rgba(0, 0, 0, 0.09);
+
+  border-radius: 7px;
+
+  background: rgba(255, 255, 255, 0.52);
+
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 400;
+
+  color: #222;
+
+  will-change:
+    transform,
+    opacity;
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.title {
+  position: relative;
+
+  width: 100%;
+  max-width: 47vw;
+
+  margin: 14px 0 0;
+
+  font-size: clamp(
+    44px,
+    4vw,
+    72px
+  );
+
+  font-weight: 400;
+
+  line-height: 0.95;
+
+  letter-spacing: -0.06em;
+
+  color: #080808;
+
+  will-change:
+    transform,
+    opacity;
+}
+
+
+/*
+ * SplitText creates these line wrappers.
+ */
+
+.title :global(.platform-title-line) {
+  display: block;
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   CONTROLS
+   ========================================================= */
+
+.controls {
+  display: flex;
+
+  gap: 8px;
+
+  margin-top: 27px;
+
+  will-change:
+    transform,
+    opacity;
+}
+
+.controls button {
+  width: 52px;
+  height: 52px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 1px solid rgba(0, 0, 0, 0.055);
+
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.52);
+
+  color: #111;
+
+  font-size: 20px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  appearance: none;
+
+  touch-action: manipulation;
+
+  transition:
+    transform 220ms ease,
+    background 220ms ease;
+}
+
+.controls button:hover {
+  transform: translateY(-2px);
+
+  background:
+    rgba(255, 255, 255, 0.82);
+}
+
+.controls button:first-child {
+  background:
+    rgba(255, 255, 255, 0.72);
+}
+
+
+/* =========================================================
+   FEATURE
+   =========================================================
+   The feature sits at the lower-left of the right column,
+   exactly like the reference.
+   ========================================================= */
+
+.feature {
+  position: absolute;
+
+  left: 0;
+  bottom: 0;
+
+  /*
+   * Keep the feature copy completely clear of the
+   * bottom-right secondary image.
+   *
+   * The secondary image is positioned against the same
+   * content column, so reserve its full width + a fixed gap.
+   */
+  width: min(
+    430px,
+    calc(100% - 21.1vw - 40px)
+  );
+
+  max-width: calc(
+    100% - 21.1vw - 40px
+  );
+
+  will-change:
+    transform,
+    opacity;
+}
+
+.feature h3 {
+  margin: 0 0 10px;
+
+  font-size: 27px;
+
+  font-weight: 400;
+
+  line-height: 1;
+
+  letter-spacing: -0.045em;
+
+  color: #111;
+}
+
+.feature p {
+  display: block;
+
+  margin: 0;
+
+  width: 100%;
+  max-width: 100%;
+
+  overflow-wrap: break-word;
+  word-break: normal;
+
+  font-size: 15px;
+
+  line-height: 1.45;
+
+  font-weight: 400;
+
+  letter-spacing: -0.015em;
+
+  color: #999;
+}
+
+
+/* =========================================================
+   LEARN MORE
+   ========================================================= */
+
+.learnMore {
+  display: inline-flex;
+
+  align-items: center;
+
+  height: 37px;
+
+  margin-top: 20px;
+
+  padding:
+    4px 4px 4px 12px;
+
+  border:
+    1px solid
+    rgba(0, 0, 0, 0.08);
+
+  border-radius: 7px;
+
+  background: #fff;
+
+  color: #111;
+
+  font-size: 11px;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  touch-action: manipulation;
+
+  transition:
+    transform 220ms ease;
+}
+
+.learnMore:hover {
+  transform:
+    translateY(-2px);
+}
+
+.arrow {
+  width: 27px;
+  height: 27px;
+
+  margin-left: 8px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 5px;
+
+  background: #080808;
+
+  color: #fff;
+
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   SECONDARY IMAGE
+   =========================================================
+   Reference:
+   - right ~2.2vw
+   - bottom ~9vh
+   - width ~21vw
+   - height ~38vh
+   ========================================================= */
+
+.secondaryImage {
+  position: absolute;
+
+  right: 2.2vw;
+  bottom: 9.1vh;
+
+  width: 21.1vw;
+  height: 38.1vh;
+
+  overflow: hidden;
+
+  border-radius: 16px;
+
+  clip-path:
+    inset(100% 0% 0% 0%);
+
+  opacity: 0;
+
+  transform:
+    translateY(24px);
+
+  will-change:
+    clip-path,
+    transform,
+    opacity;
+
+  z-index: 10;
+}
+
+.secondaryImage img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  user-select: none;
+
+  -webkit-user-drag: none;
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+   ========================================================= */
+
+@media (min-width: 1440px) {
+  .mainImage {
+    left: 2.5vw;
+
+    top: 16.25vh;
+    bottom: 9.1vh;
+
+    width: 41.9vw;
+  }
+
+  .content {
+    top: 5.1vh;
+
+    left: 47.2vw;
+    right: 2.2vw;
+
+    height: 85.8vh;
+  }
+
+  .title {
+    max-width: 47vw;
+
+    font-size:
+      clamp(
+        58px,
+        4vw,
+        72px
+      );
+  }
+
+  .secondaryImage {
+    right: 2.2vw;
+    bottom: 9.1vh;
+
+    width: 21.1vw;
+    height: 38.1vh;
+  }
+}
+
+
+/* =========================================================
+   VERY WIDE DESKTOP
+   ========================================================= */
+
+@media (min-width: 1800px) {
+  .mainImage {
+    width: 41.9vw;
+  }
+
+  .title {
+    max-width: 47vw;
+
+    font-size: 72px;
+  }
+
+  .feature {
+    width: min(
+      28vw,
+      540px
+    );
+  }
+}
+
+
+/* =========================================================
+   DESKTOP OVERLAP SAFETY
+   ========================================================= */
+
+/*
+ * The feature and secondary image occupy the same right-side
+ * composition. This creates a guaranteed visual gutter even
+ * when the viewport becomes narrower.
+ */
+@media (min-width: 1200px) {
+  .feature {
+    right: calc(
+      21.1vw + 40px
+    );
+
+    width: auto;
+
+    max-width: 430px;
+  }
+
+  .feature p {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1199px) {
+  .section {
+    height: auto;
+
+    min-height: 100svh;
+
+    overflow: visible;
+  }
+
+  .container {
+    display: flex;
+
+    flex-direction: column;
+
+    height: auto;
+
+    padding: 24px;
+  }
+
+  .mainImage {
+    position: relative;
+
+    top: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+
+    width: 100%;
+
+    height: 65svh;
+
+    min-height: 450px;
+
+    margin-bottom: 32px;
+
+    border-radius:
+      0 0 16px 16px;
+  }
+
+  .content {
+    position: relative;
+
+    top: auto;
+    left: auto;
+    right: auto;
+
+    width: 100%;
+    height: auto;
+  }
+
+  .eyebrow {
+    font-size: 12px;
+  }
+
+  .title {
+    width: 100%;
+
+    max-width: 800px;
+
+    font-size:
+      clamp(
+        48px,
+        7vw,
+        72px
+      );
+  }
+
+  .controls {
+    margin-top: 24px;
+  }
+
+  .feature {
+    position: relative;
+
+    left: auto;
+    bottom: auto;
+
+    width: 100%;
+
+    margin-top: 90px;
+    margin-bottom: 30px;
+  }
+
+  .feature p {
+    max-width: 600px;
+  }
+
+  .secondaryImage {
+    position: relative;
+
+    right: auto;
+    bottom: auto;
+
+    width: min(
+      420px,
+      100%
+    );
+
+    height: 420px;
+
+    margin-left: auto;
+  }
+
+  .controls button,
+  .learnMore {
+    touch-action: manipulation;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .section {
+    min-height: 100svh;
+    overflow: visible;
+  }
+
+  /*
+   * Mobile composition:
+   * Eyebrow -> Title -> Controls -> Main Image -> Feature.
+   * The secondary image is removed on mobile.
+   */
+  .container {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto auto;
+    align-items: start;
+    width: 100%;
+    height: auto;
+    padding: 18px;
+  }
+
+  .content {
+    display: contents;
+  }
+
+  .eyebrow {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+    padding: 7px 10px;
+    font-size: 11px;
+    z-index: 5;
+  }
+
+  .title {
+    grid-column: 1;
+    grid-row: 2;
+    width: 100%;
+    max-width: 100%;
+    margin: 14px 0 0;
+    font-size: clamp(42px, 12vw, 62px);
+    line-height: 0.95;
+    z-index: 5;
+  }
+
+  .title :global(.platform-title-line) {
+    display: block;
+    overflow: hidden;
+  }
+
+  .controls {
+    grid-column: 1;
+    grid-row: 3;
+    gap: 7px;
+    margin-top: 21px;
+    z-index: 5;
+  }
+
+  .controls button {
+    width: 46px;
+    height: 46px;
+    border-radius: 9px;
+    font-size: 18px;
+  }
+
+  /*
+   * Shorter image keeps the feature title, description and
+   * Learn More button in the same phone viewport.
+   */
+  .mainImage {
+    position: relative;
+    grid-column: 1;
+    grid-row: 4;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    width: 100%;
+    height: clamp(220px, 32svh, 300px);
+    min-height: 0;
+    max-height: 300px;
+    margin: 20px 0 0;
+    overflow: hidden;
+    border-radius: 14px;
+    z-index: 1;
+  }
+
+  .mainImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Mobile: no secondary image and no reserved layout space. */
+  .secondaryImage {
+    display: none !important;
+  }
+
+  .feature {
+    position: relative;
+    grid-column: 1;
+    grid-row: 5;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    max-width: 100%;
+    margin: 14px 0 24px;
+    z-index: 5;
+  }
+
+  .feature h3 {
+    margin-bottom: 8px;
+    font-size: 23px;
+    line-height: 1;
+  }
+
+  .feature p {
+    width: 100%;
+    max-width: 100%;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .learnMore {
+    height: 37px;
+    margin-top: 14px;
+    font-size: 12px;
+  }
+
+  .controls button,
+  .learnMore {
+    touch-action: manipulation;
+  }
+}
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 390px) {
+  .container {
+    padding: 15px;
+  }
+
+  .mainImage {
+    height: clamp(210px, 31svh, 275px);
+    max-height: 275px;
+    margin-top: 22px;
+  }
+
+  .title {
+    font-size: 42px;
+  }
+
+  .feature {
+    margin-top: 16px;
+    margin-bottom: 24px;
+  }
+
+  .feature h3 {
+    font-size: 22px;
+  }
+
+  .feature p {
+    font-size: 12.5px;
+  }
+
+  .learnMore {
+    margin-top: 13px;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .mainImage,
+  .mainImage img,
+  .eyebrow,
+  .title,
+  .controls,
+  .feature,
+  .secondaryImage {
+    transition: none !important;
+  }
+}
