@@ -508,79 +508,28 @@ export default function InfrastructureSection() {
         );
 
         /*
-         * MOBILE ARCHITECTURE
-         * --------------------------------------------------------
-         * Every About chapter stays in normal document flow.
-         * Nothing is pinned, sticky, fixed, or hidden as a whole.
+         * MOBILE:
          *
-         * The chapter reveal alternates horizontally:
-         *
-         *   01  -> enters from LEFT  -> center -> exits LEFT
-         *   02  -> enters from RIGHT -> center -> exits RIGHT
-         *   03  -> enters from LEFT  -> center -> exits LEFT
-         *
-         * Because the animation is scrubbed by ScrollTrigger, the
-         * movement reverses naturally when the user scrolls upward.
-         * This gives the mobile section the same physical feeling as
-         * the intro without creating artificial blank scroll space.
+         * Deliberately do NOT create ScrollTriggers here.
+         * Native browser scrolling must remain completely independent
+         * from animation progress. IntersectionObserver only starts
+         * short, finite animations after the browser has already
+         * scrolled to the chapter.
          */
-
         gsap.set(label, {
           autoAlpha: 0.65,
-          y: 18,
+          y: 14,
         });
 
-        /* The desktop points are hidden on mobile by CSS. */
         gsap.set(pointItems, {
           autoAlpha: 1,
-          x: 0,
-          y: 0,
-          scale: 1,
+          clearProps: "transform",
         });
-
-        gsap.set(sceneItems, {
-          clearProps: "visibility,opacity,transform",
-        });
-
-        const triggers: ScrollTrigger[] = [];
-
-        /* --------------------------------------------------------
-           ABOUT HEADER
-           -------------------------------------------------------- */
-
-        const headerTimeline = gsap.timeline({
-          paused: true,
-          defaults: {
-            ease: "power3.out",
-          },
-        });
-
-        headerTimeline.to(label, {
-          autoAlpha: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.8,
-        });
-
-        triggers.push(
-          ScrollTrigger.create({
-            trigger: stage,
-            animation: headerTimeline,
-            start: "top 88%",
-            toggleActions: "play none none reverse",
-            invalidateOnRefresh: true,
-            fastScrollEnd: true,
-          })
-        );
-
-        /* --------------------------------------------------------
-           ALTERNATING CHAPTER REVEALS
-           -------------------------------------------------------- */
 
         sceneItems.forEach((scene, index) => {
-          const copy =
+          const scenePoint =
             scene.querySelector<HTMLElement>(
-              ".about-copy"
+              "[data-about-scene-point]"
             );
 
           const heading =
@@ -603,14 +552,8 @@ export default function InfrastructureSection() {
               ".about-side"
             );
 
-          const scenePoint =
-            scene.querySelector<HTMLElement>(
-              ".about-scene-point"
-            );
-
           const revealItems = [
             scenePoint,
-            copy,
             heading,
             button,
             image,
@@ -618,140 +561,155 @@ export default function InfrastructureSection() {
           ].filter(Boolean) as HTMLElement[];
 
           /*
-           * Keep the article itself visible at all times. Only its
-           * internal content moves, so the document can never expose
-           * a blank white chapter because of an opacity/pin failure.
+           * The article itself is ALWAYS visible.
+           * Only its contents receive animation.
            */
           gsap.set(scene, {
             autoAlpha: 1,
-            clearProps:
-              "visibility,opacity,transform",
+            clearProps: "visibility,opacity,transform",
           });
 
-          /*
-           * Even chapter = LEFT -> RIGHT into the center.
-           * Odd chapter  = RIGHT -> LEFT into the center.
-           */
-          const direction =
-            index % 2 === 0 ? -1 : 1;
-
-          const enterX = 110 * direction;
-          const exitX = 110 * direction;
-
-          gsap.set(revealItems, {
-            autoAlpha: 0.12,
-            x: enterX,
-            y: 18,
-            scale: 0.985,
-          });
-
-          const revealTimeline =
-            gsap.timeline({
-              paused: true,
-              defaults: {
-                ease: "power3.out",
-              },
-            });
-
-          /*
-           * ENTER
-           * The complete chapter slides horizontally into place.
-           * The stagger keeps the number, heading, image and side
-           * information connected while still feeling alive.
-           */
-          revealTimeline.to(
-            revealItems,
-            {
+          if (index === 0) {
+            gsap.set(revealItems, {
               autoAlpha: 1,
               x: 0,
               y: 0,
               scale: 1,
-              duration: 0.48,
-              stagger: 0.045,
-              ease: "power3.out",
-            },
-            0.08
-          );
-
-          const trigger =
-            ScrollTrigger.create({
-              trigger: scene,
-              animation: revealTimeline,
-
-              /*
-               * Use the actual chapter bounds. There is no pin and no
-               * artificial viewport-sized spacer.
-               */
-              start: "top 88%",
-              toggleActions: "play none none reverse",
-              invalidateOnRefresh: true,
-              fastScrollEnd: true,
             });
+          } else {
+            const direction =
+              index % 2 === 0 ? -1 : 1;
 
-          triggers.push(trigger);
-
-        });
-
-        /* --------------------------------------------------------
-           REFRESH AFTER MOBILE LAYOUT / IMAGES SETTLE
-           -------------------------------------------------------- */
-
-        const refresh = () => {
-          ScrollTrigger.refresh();
-        };
-
-        const frame =
-          requestAnimationFrame(() => {
-            requestAnimationFrame(refresh);
-          });
-
-        const handleLoad = () => {
-          requestAnimationFrame(refresh);
-        };
-
-        window.addEventListener(
-          "load",
-          handleLoad,
-          { once: true }
-        );
-
-        const observer =
-          new ResizeObserver(refresh);
-
-        observer.observe(stage);
-
-        sceneItems.forEach((scene) => {
-          const image =
-            scene.querySelector<HTMLImageElement>(
-              "img"
-            );
-
-          if (image) {
-            if (image.complete) {
-              refresh();
-            } else {
-              image.addEventListener(
-                "load",
-                refresh,
-                { once: true }
-              );
-            }
+            gsap.set(revealItems, {
+              autoAlpha: 0,
+              x: 28 * direction,
+              y: 12,
+              scale: 0.985,
+            });
           }
         });
 
-        return () => {
-          cancelAnimationFrame(frame);
+        const observer =
+          new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                const scene =
+                  entry.target as HTMLElement;
 
-          window.removeEventListener(
-            "load",
-            handleLoad
+                const scenePoint =
+                  scene.querySelector<HTMLElement>(
+                    "[data-about-scene-point]"
+                  );
+
+                const heading =
+                  scene.querySelector<HTMLElement>(
+                    ".about-heading"
+                  );
+
+                const button =
+                  scene.querySelector<HTMLElement>(
+                    ".about-button"
+                  );
+
+                const image =
+                  scene.querySelector<HTMLElement>(
+                    ".about-image-left"
+                  );
+
+                const side =
+                  scene.querySelector<HTMLElement>(
+                    ".about-side"
+                  );
+
+                const items = [
+                  scenePoint,
+                  heading,
+                  button,
+                  image,
+                  side,
+                ].filter(Boolean) as HTMLElement[];
+
+                const index =
+                  sceneItems.indexOf(scene);
+
+                const direction =
+                  index % 2 === 0 ? -1 : 1;
+
+                if (entry.isIntersecting) {
+                  gsap.killTweensOf(items);
+
+                  gsap.to(items, {
+                    autoAlpha: 1,
+                    x: 0,
+                    y: 0,
+                    scale: 1,
+                    duration: 0.45,
+                    stagger: 0.035,
+                    ease: "power3.out",
+                    overwrite: true,
+                  });
+                } else if (
+                  entry.boundingClientRect.top > 0
+                ) {
+                  /*
+                   * When returning upward, reset the chapter so the
+                   * entrance can replay. This is a normal finite tween,
+                   * not scroll-linked animation.
+                   */
+                  gsap.killTweensOf(items);
+
+                  gsap.to(items, {
+                    autoAlpha: 0,
+                    x: 28 * direction,
+                    y: 12,
+                    scale: 0.985,
+                    duration: 0.25,
+                    ease: "power2.in",
+                    overwrite: true,
+                  });
+                }
+              });
+            },
+            {
+              root: null,
+              rootMargin: "-8% 0px -12% 0px",
+              threshold: 0.12,
+            }
           );
 
-          observer.disconnect();
+        sceneItems.forEach((scene) => {
+          observer.observe(scene);
+        });
 
-          triggers.forEach((trigger) => {
-            trigger.kill();
-          });
+        const headerObserver =
+          new IntersectionObserver(
+            (entries) => {
+              if (!entries[0]?.isIntersecting) {
+                return;
+              }
+
+              gsap.to(label, {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.5,
+                ease: "power3.out",
+                overwrite: true,
+              });
+
+              headerObserver.disconnect();
+            },
+            {
+              root: null,
+              rootMargin: "0px 0px -15% 0px",
+              threshold: 0.01,
+            }
+          );
+
+        headerObserver.observe(stage);
+
+        return () => {
+          observer.disconnect();
+          headerObserver.disconnect();
         };
       });
       return () => {

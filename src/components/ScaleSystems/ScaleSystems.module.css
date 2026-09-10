@@ -284,52 +284,37 @@
 @media (max-width: 900px) {
   .section {
     position: relative;
-
     width: 100%;
-
     min-height: auto;
     height: auto;
-
     padding: 0;
-
     overflow: visible;
   }
 
   .stage {
     position: relative;
-
     width: 100%;
-
     height: auto;
-
     min-height: 0;
     max-height: none;
-
     padding:
       24px
       14px
       48px;
-
     overflow: visible;
-
     transform: none !important;
   }
 
   .container {
     width: 100%;
-
     height: auto;
   }
 
   .header {
     display: block;
-
     width: 100%;
-
     height: auto;
-
     min-height: 0;
-
     padding:
       0
       2px
@@ -342,89 +327,65 @@
 
   .heading {
     max-width: 100%;
-
     margin-top: 16px;
-
     font-size:
       clamp(
         42px,
         12.7vw,
         60px
       );
-
     line-height: 0.9;
+    will-change: auto;
   }
 
   .intro {
     max-width: 330px;
-
     margin:
       16px 0 0;
-
     font-size: 12px;
-
     line-height: 1.42;
+    will-change: auto;
   }
 
+  /*
+   * Mobile panels are ordinary document-flow blocks.
+   * There is no sticky positioning, absolute stacking, pinning,
+   * or scroll-linked layout animation.
+   */
   .panels {
     position: relative;
-
     display: flex;
-
     flex-direction: column;
-
     width: 100%;
-
     height: auto;
-
     min-height: 0;
     max-height: none;
-
     gap: 20px;
-
     overflow: visible;
-
     border: 0;
-
     border-radius: 0;
-
     background: transparent;
   }
 
   .panel {
     position: relative;
-
     inset: auto;
-
     flex: 0 0 auto;
-
     width: 100%;
-
     height:
       calc(100svh - 150px);
-
     min-height: 500px;
-
     max-height: none;
-
     margin: 0;
-
     overflow: hidden;
-
     border:
       1px solid
       rgba(0, 0, 0, 0.15);
-
     border-radius: 15px;
-
     opacity: 1 !important;
-
     visibility: visible !important;
-
     transform: none !important;
-
-    will-change:
-      transform;
+    will-change: auto;
   }
 
   .panel:last-child {
@@ -435,15 +396,14 @@
 
   .panelTop {
     top: 13px;
-
     left: 14px;
     right: 14px;
-
     z-index: 20;
   }
 
   .panelLabel {
     font-size: 9px;
+    will-change: auto;
   }
 
   .panelIndex {
@@ -452,10 +412,8 @@
 
   .numberWrap {
     top: 38px;
-
     left: 2px;
     right: auto;
-
     z-index: 2;
   }
 
@@ -466,24 +424,23 @@
         48vw,
         245px
       );
-
     line-height: 0.68;
+    will-change: auto;
   }
 
   .panelCard {
     top: 132px;
-
     left: 9px;
     right: 9px;
     bottom: 9px;
-
     z-index: 5;
-
     border-radius: 11px;
+    will-change: auto;
   }
 
   .card {
     border-radius: 11px;
+    will-change: auto;
   }
 
   .cardContent {
@@ -492,7 +449,6 @@
 
   .cardTitle {
     max-width: 92%;
-
     font-size:
       clamp(
         19px,
@@ -503,7 +459,6 @@
 
   .cardDescription {
     max-width: 88%;
-
     font-size: 11px;
   }
 
@@ -514,6 +469,7 @@
         0,
         0
       );
+    will-change: auto;
   }
 }
 
@@ -536,15 +492,12 @@
   .panel {
     height:
       calc(100svh - 132px);
-
     min-height: 480px;
-
     border-radius: 13px;
   }
 
   .panelTop {
     top: 12px;
-
     left: 12px;
     right: 12px;
   }
@@ -564,7 +517,6 @@
 
   .panelCard {
     top: 123px;
-
     left: 8px;
     right: 8px;
     bottom: 8px;
@@ -587,7 +539,6 @@
   .panel {
     height:
       calc(100svh - 122px);
-
     min-height: 450px;
   }
 

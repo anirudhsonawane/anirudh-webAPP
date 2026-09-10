@@ -675,79 +675,44 @@
 @media (max-width: 900px) {
   .about-section {
     position: relative;
-
     width: 100%;
-
-    overflow-x: clip;
-
     min-height: auto;
     height: auto;
-
     padding: 10px;
-
     overflow: visible;
   }
 
   .about-stage {
     position: relative;
-
     width: 100%;
-
     height: auto;
-
     min-height: 0;
     max-height: none;
-
     overflow: hidden;
-
     border-radius: 18px;
   }
 
   .about-container {
     position: relative;
-
     width: 100%;
-
     height: auto;
     min-height: 0;
-
     padding:
       24px
       18px
       28px;
-
     box-sizing: border-box;
   }
 
   .about-top {
     display: flex;
-
     flex-direction: column;
-
     gap: 18px;
   }
 
   .about-label {
     font-size: 9px;
-  }
-
-  .about-points {
-    display: grid;
-
-    grid-template-columns:
-      repeat(3, minmax(0, 1fr));
-
-    gap: 8px;
-  }
-
-  .about-point {
-    gap: 5px;
-
-    min-width: 0;
-  }
-
-  .about-point-number {
-    font-size: 17px;
+    will-change: auto;
   }
 
   .about-points {
@@ -756,18 +721,12 @@
 
   .about-scene-point {
     display: flex;
-
     flex-direction: column;
-
     gap: 5px;
-
     width: 100%;
-
     margin-bottom: 18px;
-
     min-width: 0;
-
-    will-change: transform, opacity;
+    will-change: auto;
   }
 
   .about-scene-point .about-point-number {
@@ -776,134 +735,103 @@
 
   .about-scene-point p {
     max-width: 100%;
-
     margin: 0;
-
     font-size: 8px;
-
     line-height: 1.25;
   }
 
   /*
-   * Each scene is now only as tall as its actual content.
-   * This removes the old 100svh spacer that produced the large
-   * white area underneath every About subsection.
+   * Mobile scenes are ordinary blocks in the document.
+   * Never use sticky, absolute positioning, or a viewport-sized
+   * story canvas here.
    */
   .about-scenes {
     position: relative;
-
     top: auto;
     right: auto;
     bottom: auto;
     left: auto;
-
     display: flex;
-
     flex-direction: column;
-
     width: 100%;
     height: auto;
-
     margin-top: 28px;
-
     gap: 52px;
-
     overflow: visible;
   }
 
   .about-scene {
     position: relative;
-
     inset: auto;
-
     display: flex;
-
     flex-direction: column;
-
     align-items: stretch;
     justify-content: flex-start;
-
     width: 100%;
     height: auto;
-
     min-height: 0;
-
     padding: 0 0 8px;
-
     gap: 0;
-
     visibility: visible !important;
     opacity: 1 !important;
-
     transform: none !important;
-
     pointer-events: auto;
-
     will-change: auto;
   }
 
   .about-scene .about-copy {
     order: 1;
-
     width: 100%;
     max-width: none;
-
     padding: 0;
   }
 
   .about-heading {
     max-width: none;
-
     font-size:
       clamp(
         30px,
         8.7vw,
         40px
       );
-
     line-height: 0.95;
+    will-change: auto;
   }
 
   .about-button {
     margin-top: 13px;
-
     padding:
-      7px 9px;
-
+      7px
+      9px;
     border-radius: 8px;
-
     font-size: 10px;
   }
 
   .about-scene .about-image-left {
     order: 2;
-
     width: 100%;
-
     height:
       clamp(
         135px,
         40vw,
         180px
       );
-
     margin-top: 13px;
-
     flex: 0 0 auto;
-
     border-radius: 10px;
+    will-change: auto;
   }
 
   .about-scene .about-side {
     order: 3;
-
     width: 100%;
-
     margin-top: 9px;
+    will-change: auto;
   }
 
   .about-side-label {
     font-size: 8.5px;
+    will-change: auto;
   }
 
   .about-scene .about-image-right {
@@ -925,7 +853,6 @@
 
   .about-scenes {
     margin-top: 24px;
-
     gap: 46px;
   }
 
@@ -947,18 +874,6 @@
   .about-container {
     padding-left: 13px;
     padding-right: 13px;
-  }
-
-  .about-points {
-    gap: 6px;
-  }
-
-  .about-point-number {
-    font-size: 15px;
-  }
-
-  .about-point p {
-    font-size: 7px;
   }
 
   .about-heading {

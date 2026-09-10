@@ -370,236 +370,250 @@ export default function ScaleSystems() {
           return;
         }
 
-        const triggers: ScrollTrigger[] = [];
-
         /*
-         * The header has its own smooth scroll-driven entrance.
+         * MOBILE:
+         *
+         * No ScrollTrigger is created here.
+         * Native document scrolling is completely independent from
+         * GSAP. IntersectionObserver starts short, finite animations
+         * only after a panel enters the viewport.
          */
-        gsap.set(
-          [heading, intro],
-          {
-            autoAlpha: 0.55,
-            y: 20,
-          }
-        );
+        gsap.set([heading, intro], {
+          autoAlpha: 0.55,
+          y: 16,
+        });
 
-        const headerTimeline =
-          gsap.timeline({
-            paused: true,
-            defaults: {
-              ease: "power3.out",
-            },
+        panels.forEach((panel, index) => {
+          const number =
+            panel.querySelector<HTMLElement>(
+              `.${styles.giantNumber}`
+            );
+
+          const label =
+            panel.querySelector<HTMLElement>(
+              `.${styles.panelLabel}`
+            );
+
+          const panelIndex =
+            panel.querySelector<HTMLElement>(
+              `.${styles.panelIndex}`
+            );
+
+          const card =
+            panel.querySelector<HTMLElement>(
+              `.${styles.card}`
+            );
+
+          const content =
+            panel.querySelector<HTMLElement>(
+              `.${styles.cardContent}`
+            );
+
+          const items = [
+            number,
+            label,
+            panelIndex,
+            card,
+            content,
+          ].filter(Boolean) as HTMLElement[];
+
+          gsap.set(panel, {
+            autoAlpha: 1,
+            clearProps:
+              "opacity,visibility,transform",
           });
 
-        headerTimeline.to(
-          heading,
-          {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.85,
-          }
-        );
-
-        headerTimeline.to(
-          intro,
-          {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.72,
-          },
-          "<0.14"
-        );
-
-        triggers.push(
-          ScrollTrigger.create({
-            trigger: section,
-            animation: headerTimeline,
-
-            start: "top 86%",
-            end: "top 46%",
-
-            scrub: 0.7,
-
-            invalidateOnRefresh: true,
-
-            fastScrollEnd: false,
-          })
-        );
-
-        panels.forEach(
-          (panel, index) => {
-            const number =
-              panel.querySelector<HTMLElement>(
-                `.${styles.giantNumber}`
-              );
-
-            const label =
-              panel.querySelector<HTMLElement>(
-                `.${styles.panelLabel}`
-              );
-
-            const panelIndex =
-              panel.querySelector<HTMLElement>(
-                `.${styles.panelIndex}`
-              );
-
-            const card =
-              panel.querySelector<HTMLElement>(
-                `.${styles.card}`
-              );
-
-            const image =
-              panel.querySelector<HTMLElement>(
-                `.${styles.cardImage}`
-              );
-
-            const content =
-              panel.querySelector<HTMLElement>(
-                `.${styles.cardContent}`
-              );
-
-            const items = [
-              number,
-              label,
-              panelIndex,
-              card,
-              content,
-            ].filter(Boolean) as HTMLElement[];
-
-            /*
-             * Never hide the panel itself.
-             */
-            gsap.set(panel, {
+          if (index === 0) {
+            gsap.set(items, {
               autoAlpha: 1,
-              clearProps:
-                "opacity,visibility,transform",
+              x: 0,
+              y: 0,
+              scale: 1,
             });
+          } else {
+            const direction =
+              index % 2 === 0 ? -1 : 1;
 
             gsap.set(items, {
-              autoAlpha: 0.55,
-              y: 24,
+              autoAlpha: 0,
+              x: 24 * direction,
+              y: 18,
               scale: 0.985,
             });
-
-            if (index === 0) {
-              gsap.set(items, {
-                autoAlpha: 1,
-                y: 0,
-                scale: 1,
-              });
-            }
-
-            const timeline =
-              gsap.timeline({
-                paused: true,
-                defaults: {
-                  ease: "power3.out",
-                },
-              });
-
-            if (number) {
-              timeline.to(
-                number,
-                {
-                  autoAlpha: 1,
-                  y: 0,
-                  scale: 1,
-                  duration: 0.8,
-                },
-                0
-              );
-            }
-
-            timeline.to(
-              [label, panelIndex].filter(
-                Boolean
-              ) as HTMLElement[],
-              {
-                autoAlpha: 1,
-                y: 0,
-                duration: 0.65,
-                stagger: 0.05,
-              },
-              0.08
-            );
-
-            if (card) {
-              timeline.to(
-                card,
-                {
-                  autoAlpha: 1,
-                  y: 0,
-                  scale: 1,
-                  duration: 0.9,
-                },
-                0.12
-              );
-            }
-
-            if (content) {
-              timeline.to(
-                content,
-                {
-                  autoAlpha: 1,
-                  y: 0,
-                  duration: 0.68,
-                },
-                0.26
-              );
-            }
-
-            triggers.push(
-              ScrollTrigger.create({
-                trigger: panel,
-                animation: timeline,
-
-                start: "top 86%",
-                toggleActions: "play none none reverse",
-                invalidateOnRefresh: true,
-                fastScrollEnd: true,
-              })
-            );
-
           }
-        );
+        });
 
-        const refresh = () => {
-          ScrollTrigger.refresh();
+        const revealPanel = (
+          panel: HTMLElement,
+          index: number
+        ) => {
+          const number =
+            panel.querySelector<HTMLElement>(
+              `.${styles.giantNumber}`
+            );
+
+          const label =
+            panel.querySelector<HTMLElement>(
+              `.${styles.panelLabel}`
+            );
+
+          const panelIndex =
+            panel.querySelector<HTMLElement>(
+              `.${styles.panelIndex}`
+            );
+
+          const card =
+            panel.querySelector<HTMLElement>(
+              `.${styles.card}`
+            );
+
+          const content =
+            panel.querySelector<HTMLElement>(
+              `.${styles.cardContent}`
+            );
+
+          const items = [
+            number,
+            label,
+            panelIndex,
+            card,
+            content,
+          ].filter(Boolean) as HTMLElement[];
+
+          gsap.killTweensOf(items);
+
+          gsap.to(items, {
+            autoAlpha: 1,
+            x: 0,
+            y: 0,
+            scale: 1,
+            duration: 0.48,
+            stagger: 0.04,
+            ease: "power3.out",
+            overwrite: true,
+          });
         };
 
-        const frame =
-          requestAnimationFrame(() => {
-            requestAnimationFrame(refresh);
+        const resetPanel = (
+          panel: HTMLElement,
+          index: number
+        ) => {
+          if (index === 0) {
+            return;
+          }
+
+          const number =
+            panel.querySelector<HTMLElement>(
+              `.${styles.giantNumber}`
+            );
+
+          const label =
+            panel.querySelector<HTMLElement>(
+              `.${styles.panelLabel}`
+            );
+
+          const panelIndex =
+            panel.querySelector<HTMLElement>(
+              `.${styles.panelIndex}`
+            );
+
+          const card =
+            panel.querySelector<HTMLElement>(
+              `.${styles.card}`
+            );
+
+          const content =
+            panel.querySelector<HTMLElement>(
+              `.${styles.cardContent}`
+            );
+
+          const items = [
+            number,
+            label,
+            panelIndex,
+            card,
+            content,
+          ].filter(Boolean) as HTMLElement[];
+
+          const direction =
+            index % 2 === 0 ? -1 : 1;
+
+          gsap.killTweensOf(items);
+
+          gsap.to(items, {
+            autoAlpha: 0,
+            x: 24 * direction,
+            y: 18,
+            scale: 0.985,
+            duration: 0.25,
+            ease: "power2.in",
+            overwrite: true,
           });
+        };
 
-        const observer =
-          new ResizeObserver(refresh);
+        const panelObserver =
+          new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                const panel =
+                  entry.target as HTMLElement;
 
-        observer.observe(section);
+                const index =
+                  panels.indexOf(panel);
 
-        window.addEventListener(
-          "load",
-          refresh
-        );
+                if (entry.isIntersecting) {
+                  revealPanel(panel, index);
+                } else if (
+                  entry.boundingClientRect.top > 0
+                ) {
+                  resetPanel(panel, index);
+                }
+              });
+            },
+            {
+              root: null,
+              rootMargin: "-8% 0px -12% 0px",
+              threshold: 0.12,
+            }
+          );
+
+        panels.forEach((panel) => {
+          panelObserver.observe(panel);
+        });
+
+        const headerObserver =
+          new IntersectionObserver(
+            (entries) => {
+              if (!entries[0]?.isIntersecting) {
+                return;
+              }
+
+              gsap.to([heading, intro], {
+                autoAlpha: 1,
+                x: 0,
+                y: 0,
+                duration: 0.5,
+                stagger: 0.06,
+                ease: "power3.out",
+                overwrite: true,
+              });
+
+              headerObserver.disconnect();
+            },
+            {
+              root: null,
+              rootMargin: "0px 0px -15% 0px",
+              threshold: 0.01,
+            }
+          );
+
+        headerObserver.observe(section);
 
         return () => {
-          cancelAnimationFrame(frame);
-
-          observer.disconnect();
-
-          window.removeEventListener(
-            "load",
-            refresh
-          );
-
-          triggers.forEach(
-            (trigger) => {
-              trigger.kill();
-            }
-          );
+          panelObserver.disconnect();
+          headerObserver.disconnect();
         };
       });
-
       return () => {
         mm.revert();
       };
