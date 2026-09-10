@@ -566,10 +566,10 @@ export default function InfrastructureSection() {
           ScrollTrigger.create({
             trigger: stage,
             animation: headerTimeline,
-            start: "top 92%",
-            end: "top 58%",
-            scrub: 0.65,
+            start: "top 88%",
+            toggleActions: "play none none reverse",
             invalidateOnRefresh: true,
+            fastScrollEnd: true,
           })
         );
 
@@ -673,44 +673,6 @@ export default function InfrastructureSection() {
             0.08
           );
 
-          /*
-           * HOLD
-           * The chapter remains centered while it occupies the main
-           * part of the viewport.
-           */
-          revealTimeline.to(
-            revealItems,
-            {
-              autoAlpha: 1,
-              x: 0,
-              y: 0,
-              scale: 1,
-              duration: 0.72,
-              ease: "none",
-            },
-            0.56
-          );
-
-          /*
-           * EXIT
-           * It leaves through the same side it entered from. When the
-           * user scrolls upward, this entire sequence reverses, so the
-           * chapter comes back from that same side smoothly.
-           */
-          revealTimeline.to(
-            revealItems,
-            {
-              autoAlpha: 0.12,
-              x: exitX,
-              y: 18,
-              scale: 0.985,
-              duration: 0.48,
-              stagger: 0.035,
-              ease: "power2.in",
-            },
-            1.28
-          );
-
           const trigger =
             ScrollTrigger.create({
               trigger: scene,
@@ -720,47 +682,14 @@ export default function InfrastructureSection() {
                * Use the actual chapter bounds. There is no pin and no
                * artificial viewport-sized spacer.
                */
-              start: "top 94%",
-              end: "bottom 10%",
-
-              scrub: 0.72,
-
+              start: "top 88%",
+              toggleActions: "play none none reverse",
               invalidateOnRefresh: true,
-              fastScrollEnd: false,
+              fastScrollEnd: true,
             });
 
           triggers.push(trigger);
 
-          /* ------------------------------------------------------
-             IMAGE DEPTH
-             ------------------------------------------------------ */
-
-          if (image) {
-            const imageMotion =
-              gsap.fromTo(
-                image,
-                {
-                  y: 10,
-                  scale: 1.01,
-                },
-                {
-                  y: -10,
-                  scale: 1.025,
-                  ease: "none",
-                }
-              );
-
-            triggers.push(
-              ScrollTrigger.create({
-                trigger: scene,
-                animation: imageMotion,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 0.8,
-                invalidateOnRefresh: true,
-              })
-            );
-          }
         });
 
         /* --------------------------------------------------------

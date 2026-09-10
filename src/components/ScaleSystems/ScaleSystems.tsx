@@ -553,49 +553,13 @@ export default function ScaleSystems() {
                 trigger: panel,
                 animation: timeline,
 
-                start: "top 90%",
-                end: "top 34%",
-
-                scrub: 0.7,
-
+                start: "top 86%",
+                toggleActions: "play none none reverse",
                 invalidateOnRefresh: true,
-
-                fastScrollEnd: false,
+                fastScrollEnd: true,
               })
             );
 
-            /*
-             * Gentle image depth movement.
-             */
-            if (image) {
-              const imageMotion =
-                gsap.fromTo(
-                  image,
-                  {
-                    scale: 1.02,
-                    yPercent: 1,
-                  },
-                  {
-                    scale: 1.075,
-                    yPercent: -1,
-                    ease: "none",
-                  }
-                );
-
-              triggers.push(
-                ScrollTrigger.create({
-                  trigger: panel,
-                  animation: imageMotion,
-
-                  start: "top bottom",
-                  end: "bottom top",
-
-                  scrub: 0.9,
-
-                  invalidateOnRefresh: true,
-                })
-              );
-            }
           }
         );
 
