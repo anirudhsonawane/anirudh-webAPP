@@ -277,140 +277,208 @@
    MOBILE — IMMERSIVE CHAPTER STORY
    ============================================================ */
 
+/* ============================================================
+   MOBILE — NORMAL DOCUMENT FLOW
+   ============================================================ */
+
 @media (max-width: 900px) {
   .section {
-    min-height: 100svh;
+    position: relative;
+
+    width: 100%;
+
+    min-height: auto;
+    height: auto;
+
+    padding: 0;
+
+    overflow: visible;
   }
 
-  /*
-   * The pinned stage is intentionally viewport-sized.
-   * ScrollTrigger supplies the vertical travel while this
-   * composition remains visually stable.
-   */
   .stage {
-    height: 100svh;
-    min-height: 560px;
-    padding: 24px 14px 16px;
-    overflow: hidden;
+    position: relative;
+
+    width: 100%;
+
+    height: auto;
+
+    min-height: 0;
+    max-height: none;
+
+    padding:
+      24px
+      14px
+      48px;
+
+    overflow: visible;
+
+    transform: none !important;
   }
 
   .container {
     width: 100%;
-    height: 100%;
-  }
 
-  /* ----------------------------------------------------------
-     HEADER
-     ---------------------------------------------------------- */
+    height: auto;
+  }
 
   .header {
     display: block;
+
+    width: 100%;
+
+    height: auto;
+
     min-height: 0;
-    height: 29svh;
-    padding: 0 2px 14px;
+
+    padding:
+      0
+      2px
+      26px;
+  }
+
+  .eyebrow {
+    font-size: 9px;
   }
 
   .heading {
     max-width: 100%;
-    margin-top: 17px;
-    font-size: clamp(43px, 12.7vw, 65px);
-    line-height: 0.89;
+
+    margin-top: 16px;
+
+    font-size:
+      clamp(
+        42px,
+        12.7vw,
+        60px
+      );
+
+    line-height: 0.9;
   }
 
   .intro {
-    max-width: 350px;
-    margin: 17px 0 0;
-    font-size: 12.5px;
+    max-width: 330px;
+
+    margin:
+      16px 0 0;
+
+    font-size: 12px;
+
     line-height: 1.42;
   }
 
-  .eyebrow {
-    padding: 7px 10px;
-    font-size: 9px;
-  }
-
-  /* ----------------------------------------------------------
-     STORY VIEWPORT
-     ---------------------------------------------------------- */
-
   .panels {
     position: relative;
-    display: block;
+
+    display: flex;
+
+    flex-direction: column;
+
     width: 100%;
-    height: 67svh;
-    min-height: 365px;
-    max-height: 610px;
-    overflow: hidden;
+
+    height: auto;
+
+    min-height: 0;
+    max-height: none;
+
+    gap: 20px;
+
+    overflow: visible;
+
     border: 0;
-    border-radius: 15px;
+
+    border-radius: 0;
+
     background: transparent;
   }
 
   .panel {
-    position: absolute;
-    inset: 0;
+    position: relative;
+
+    inset: auto;
+
+    flex: 0 0 auto;
+
     width: 100%;
-    height: 100%;
+
+    height:
+      calc(100svh - 150px);
+
+    min-height: 500px;
+
+    max-height: none;
+
     margin: 0;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 15px;
-    background: #f4f4f1;
+
     overflow: hidden;
-    will-change: transform, opacity;
+
+    border:
+      1px solid
+      rgba(0, 0, 0, 0.15);
+
+    border-radius: 15px;
+
+    opacity: 1 !important;
+
+    visibility: visible !important;
+
+    transform: none !important;
+
+    will-change:
+      transform;
   }
 
   .panel:last-child {
-    border-right: 1px solid rgba(0, 0, 0, 0.15);
+    border-right:
+      1px solid
+      rgba(0, 0, 0, 0.15);
   }
-
-  /* ----------------------------------------------------------
-     PANEL TOP
-     ---------------------------------------------------------- */
 
   .panelTop {
     top: 13px;
+
     left: 14px;
     right: 14px;
+
     z-index: 20;
   }
 
   .panelLabel {
     font-size: 9px;
-    letter-spacing: 0.03em;
   }
 
   .panelIndex {
     font-size: 9px;
-    color: rgba(0, 0, 0, 0.42);
   }
-
-  /* ----------------------------------------------------------
-     GIANT NUMBER
-     ---------------------------------------------------------- */
 
   .numberWrap {
     top: 38px;
-    left: 3px;
+
+    left: 2px;
     right: auto;
+
     z-index: 2;
   }
 
   .giantNumber {
-    font-size: clamp(150px, 48vw, 245px);
-    line-height: 0.68;
-    letter-spacing: -0.12em;
-  }
+    font-size:
+      clamp(
+        150px,
+        48vw,
+        245px
+      );
 
-  /* ----------------------------------------------------------
-     IMAGE CARD
-     ---------------------------------------------------------- */
+    line-height: 0.68;
+  }
 
   .panelCard {
     top: 132px;
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
+
+    left: 9px;
+    right: 9px;
+    bottom: 9px;
+
     z-index: 5;
+
     border-radius: 11px;
   }
 
@@ -424,87 +492,82 @@
 
   .cardTitle {
     max-width: 92%;
-    font-size: clamp(19px, 5.1vw, 24px);
-    line-height: 0.96;
+
+    font-size:
+      clamp(
+        19px,
+        5.1vw,
+        24px
+      );
   }
 
   .cardDescription {
     max-width: 88%;
-    margin-top: 8px;
+
     font-size: 11px;
-    line-height: 1.38;
   }
 
-  /*
-   * Keep the image itself calm while the card moves.
-   * GSAP handles the actual scale during the chapter transition.
-   */
   .cardImage {
-    transform: translate3d(0, 0, 0);
+    transform:
+      translate3d(
+        0,
+        0,
+        0
+      );
   }
 }
 
-/* ============================================================
-   SMALL PHONES
-   ============================================================ */
-
 @media (max-width: 560px) {
   .stage {
-    min-height: 520px;
-    padding: 20px 11px 12px;
+    padding:
+      20px
+      11px
+      40px;
   }
 
   .header {
-    height: 30svh;
-    padding-bottom: 10px;
-  }
-
-  .heading {
-    margin-top: 15px;
-    font-size: clamp(40px, 12.9vw, 58px);
-  }
-
-  .intro {
-    max-width: 315px;
-    margin-top: 15px;
-    font-size: 12px;
+    padding-bottom: 22px;
   }
 
   .panels {
-    height: 66svh;
-    min-height: 350px;
-    border-radius: 13px;
+    gap: 16px;
   }
 
   .panel {
+    height:
+      calc(100svh - 132px);
+
+    min-height: 480px;
+
     border-radius: 13px;
   }
 
   .panelTop {
     top: 12px;
+
     left: 12px;
     right: 12px;
   }
 
   .numberWrap {
     top: 36px;
-    left: 2px;
   }
 
   .giantNumber {
-    font-size: clamp(140px, 47vw, 220px);
+    font-size:
+      clamp(
+        140px,
+        47vw,
+        220px
+      );
   }
 
   .panelCard {
     top: 123px;
+
     left: 8px;
     right: 8px;
     bottom: 8px;
-    border-radius: 10px;
-  }
-
-  .card {
-    border-radius: 10px;
   }
 
   .cardContent {
@@ -516,31 +579,16 @@
   }
 
   .cardDescription {
-    margin-top: 7px;
     font-size: 10.5px;
   }
 }
 
-/* ============================================================
-   VERY SMALL PHONES
-   ============================================================ */
-
 @media (max-width: 390px) {
-  .stage {
-    padding-inline: 10px;
-  }
+  .panel {
+    height:
+      calc(100svh - 122px);
 
-  .heading {
-    font-size: 39px;
-  }
-
-  .intro {
-    font-size: 11.5px;
-  }
-
-  .panels {
-    height: 65svh;
-    min-height: 335px;
+    min-height: 450px;
   }
 
   .giantNumber {
@@ -553,23 +601,5 @@
 
   .cardTitle {
     font-size: 17px;
-  }
-}
-
-/* ============================================================
-   REDUCED MOTION
-   ============================================================ */
-
-@media (prefers-reduced-motion: reduce) {
-  .heading,
-  .intro,
-  .panel,
-  .giantNumber,
-  .panelLabel,
-  .panelIndex,
-  .card,
-  .cardImage,
-  .cardContent {
-    transition: none !important;
   }
 }

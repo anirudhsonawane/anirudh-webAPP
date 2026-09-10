@@ -1,9 +1,18 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import {
+  useLayoutEffect,
+} from "react";
+
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ScrollSmoother } from "gsap/ScrollSmoother";
+
+import {
+  ScrollTrigger,
+} from "gsap/ScrollTrigger";
+
+import {
+  ScrollSmoother,
+} from "gsap/ScrollSmoother";
 
 gsap.registerPlugin(
   ScrollTrigger,
@@ -17,121 +26,134 @@ type SmoothScrollProps = {
 export default function SmoothScroll({
   children,
 }: SmoothScrollProps) {
-  const wrapperRef =
-    useRef<HTMLDivElement>(null);
-
-  const contentRef =
-    useRef<HTMLDivElement>(null);
-
   useLayoutEffect(() => {
     const wrapper =
-      wrapperRef.current;
+      document.getElementById(
+        "smooth-wrapper"
+      );
 
     const content =
-      contentRef.current;
+      document.getElementById(
+        "smooth-content"
+      );
 
     if (!wrapper || !content) {
       return;
     }
 
-    const ctx = gsap.context(() => {
-      /*
-       * ==========================================================
-       * SCROLLSMOOTHER
-       * ==========================================================
-       */
+    const ctx =
+      gsap.context(() => {
+        const desktopQuery =
+          window.matchMedia(
+            "(min-width: 901px)"
+          );
 
-      const smoother =
-        ScrollSmoother.create({
-          wrapper,
-          content,
-
-          /*
-           * Main desktop smoothness.
-           *
-           * 0.55 gives a premium smooth feel without making
-           * the page feel delayed.
-           */
-          smooth: 0.55,
-
-          /*
-           * Very short touch smoothing.
-           *
-           * This keeps mobile responsive instead of feeling
-           * like the page is floating behind the finger.
-           */
-          smoothTouch: 0,
-
-          /*
-           * Effects are not required for this project.
-           */
-          effects: false,
-
-          /*
-           * Helps keep browser/mobile scrolling synchronized.
-           */
-          normalizeScroll: false,
-
-          /*
-           * Prevents mobile browser address-bar resizing from
-           * constantly changing the smoother's measurements.
-           */
+        ScrollTrigger.config({
           ignoreMobileResize: true,
         });
 
-      /*
-       * ==========================================================
-       * INITIAL REFRESH
-       * ==========================================================
-       */
+        /*
+         * Mobile/tablet:
+         *
+         * Use native document scrolling.
+         * No transformed scrolling surface is created.
+         */
+        if (!desktopQuery.matches) {
+          const refresh = () => {
+            ScrollTrigger.refresh();
+          };
 
-      const refresh = () => {
-        ScrollTrigger.refresh();
-      };
+          const frame =
+            requestAnimationFrame(() => {
+              requestAnimationFrame(
+                refresh
+              );
+            });
 
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          refresh();
-        });
-      });
+          window.addEventListener(
+            "load",
+            refresh
+          );
 
-      const resizeObserver =
-        new ResizeObserver(refresh);
+          return () => {
+            cancelAnimationFrame(frame);
 
-      resizeObserver.observe(content);
+            window.removeEventListener(
+              "load",
+              refresh
+            );
+          };
+        }
 
-      window.addEventListener(
-        "load",
-        refresh
-      );
+        /*
+         * Desktop:
+         *
+         * Keep the existing ScrollSmoother experience.
+         */
+        const smoother =
+          ScrollSmoother.create({
+            wrapper,
+            content,
 
-      return () => {
-        window.removeEventListener(
+            smooth: 0.55,
+
+            smoothTouch: 0,
+
+            effects: false,
+
+            normalizeScroll: false,
+
+            ignoreMobileResize: true,
+          });
+
+        const refresh = () => {
+          ScrollTrigger.refresh();
+        };
+
+        const frame =
+          requestAnimationFrame(() => {
+            requestAnimationFrame(
+              refresh
+            );
+          });
+
+        const observer =
+          new ResizeObserver(refresh);
+
+        observer.observe(content);
+
+        window.addEventListener(
           "load",
           refresh
         );
 
-        resizeObserver.disconnect();
+        return () => {
+          cancelAnimationFrame(frame);
 
-        ScrollTrigger.clearScrollMemory();
+          observer.disconnect();
 
-        smoother.kill();
-      };
-    }, wrapperRef);
+          window.removeEventListener(
+            "load",
+            refresh
+          );
+
+          smoother.kill();
+        };
+      });
 
     return () => {
       ctx.revert();
+
+      ScrollTrigger.clearScrollMemory();
     };
   }, []);
 
   return (
     <div
-      ref={wrapperRef}
       id="smooth-wrapper"
       className="smooth-wrapper"
     >
       <div
-        ref={contentRef}
         id="smooth-content"
         className="smooth-content"
       >

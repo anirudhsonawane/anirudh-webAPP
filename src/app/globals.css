@@ -1139,3 +1139,369 @@ body {
     min-height: 285px;
   }
 }
+
+/* =========================================================
+   MOBILE NATIVE SCROLL — SCROLLSMOOTHER ISOLATION FIX
+   =========================================================
+   IMPORTANT:
+   ScrollSmoother is disabled by SmoothScroll.tsx at <= 900px.
+   Therefore the document must return to normal browser flow on
+   mobile. The desktop ScrollSmoother structure remains untouched.
+
+   This override MUST be at the end of globals.css so it wins over
+   the desktop ScrollSmoother wrapper rules above.
+   ========================================================= */
+
+@media (max-width: 900px) {
+  html {
+    width: 100%;
+
+    min-height: 100%;
+
+    overflow-x: hidden;
+
+    overflow-y: auto;
+
+    overscroll-behavior-x: none;
+
+    overscroll-behavior-y: auto;
+
+    scroll-behavior: auto;
+  }
+
+  body {
+    position: relative;
+
+    width: 100%;
+
+    min-width: 0;
+
+    min-height: 100vh;
+
+    margin: 0;
+
+    padding: 0;
+
+    overflow-x: hidden;
+
+    overflow-y: visible;
+  }
+
+  /*
+   * ScrollSmoother normally makes this element the fixed viewport.
+   * That MUST NOT happen when the smoother is disabled on mobile.
+   */
+  #smooth-wrapper,
+  .smooth-wrapper {
+    position: relative;
+
+    top: auto;
+
+    left: auto;
+
+    right: auto;
+
+    bottom: auto;
+
+    width: 100%;
+
+    height: auto;
+
+    min-height: 100vh;
+
+    margin: 0;
+
+    padding: 0;
+
+    overflow: visible;
+
+    z-index: auto;
+
+    transform: none !important;
+
+    will-change: auto;
+  }
+
+  /*
+   * ScrollSmoother normally transforms this element.
+   * Mobile must keep it in normal document flow.
+   */
+  #smooth-content,
+  .smooth-content {
+    position: relative;
+
+    top: auto;
+
+    left: auto;
+
+    width: 100%;
+
+    height: auto;
+
+    min-height: 100vh;
+
+    margin: 0;
+
+    padding: 0;
+
+    overflow: visible;
+
+    transform: none !important;
+
+    will-change: auto;
+
+    contain: none;
+  }
+
+  /*
+   * Never allow a child transform to become the page's scroll
+   * container. ScrollTrigger mobile pinning needs one stable
+   * document coordinate system.
+   */
+  #smooth-content > * {
+    transform-style: flat;
+  }
+
+  /*
+   * The custom scrollbar is already hidden on mobile, but keeping
+   * this explicit prevents it from participating in layout.
+   */
+  .custom-scrollbar {
+    display: none !important;
+  }
+
+  /*
+   * Full-screen ScrollTrigger sections must be allowed to create
+   * their own pin-spacer in normal document flow.
+   */
+  .about-section,
+  .system-visuals-section {
+    position: relative;
+
+    width: 100%;
+
+    overflow: visible;
+  }
+}
+
+/* =========================================================
+   MOBILE — PREVENT VIEWPORT-HEIGHT LOCKING
+   ========================================================= */
+
+@media (max-width: 900px) {
+  /*
+   * These properties deliberately use svh for the visual stage,
+   * while the surrounding section remains the document's scroll
+   * track. Do NOT make the section itself fixed or sticky here.
+   */
+
+  .about-stage,
+  .stage {
+    transform: none !important;
+  }
+}
+
+/* =========================================================
+   MOBILE — SAFARI / CHROME PIN STABILITY
+   ========================================================= */
+
+@media (max-width: 900px) {
+  html,
+  body {
+    overscroll-behavior-y: auto;
+  }
+
+  img,
+  video,
+  canvas {
+    backface-visibility: hidden;
+  }
+}
+
+
+/* =========================================================
+   MOBILE — FINAL NATIVE SCROLL / PINNING SAFETY
+   =========================================================
+   Mobile does NOT use ScrollSmoother. ScrollTrigger therefore
+   works directly against the browser document scroller.
+   ========================================================= */
+
+@media (max-width: 900px) {
+  html,
+  body {
+    width: 100%;
+
+    min-width: 0;
+
+    min-height: 100%;
+
+    overflow-x: hidden;
+
+    overflow-y: auto;
+  }
+
+  body {
+    position: relative;
+  }
+
+  #smooth-wrapper,
+  .smooth-wrapper {
+    position: relative;
+
+    width: 100%;
+
+    height: auto;
+
+    min-height: 100vh;
+
+    margin: 0;
+
+    padding: 0;
+
+    overflow: visible;
+
+    transform: none !important;
+
+    will-change: auto;
+  }
+
+  #smooth-content,
+  .smooth-content {
+    position: relative;
+
+    width: 100%;
+
+    height: auto;
+
+    min-height: 100vh;
+
+    margin: 0;
+
+    padding: 0;
+
+    overflow: visible;
+
+    transform: none !important;
+
+    will-change: auto;
+
+    contain: none;
+  }
+
+  /*
+   * The page wrapper from page.tsx uses Tailwind overflow-x-clip.
+   * A pinned descendant must not be clipped by an ancestor.
+   */
+  #smooth-content > main {
+    position: relative;
+
+    width: 100%;
+
+    max-width: none;
+
+    overflow: visible !important;
+  }
+
+  /*
+   * Do not leave a transform/will-change containing block above
+   * a native ScrollTrigger pin.
+   */
+  #smooth-content > main,
+  #smooth-content > main > * {
+    transform-style: flat;
+  }
+
+  .custom-scrollbar {
+    display: none !important;
+  }
+}
+
+/* =========================================================
+   MOBILE — STICKY STORY SECTIONS MUST NOT BE CLIPPED
+   ========================================================= */
+
+@media (max-width: 900px) {
+  #smooth-content > main,
+  #smooth-content > main > * {
+    overflow: visible !important;
+  }
+}
+
+/* =========================================================
+   MOBILE — PLATFORM FAIL-SAFE
+   =========================================================
+   PlatformReveal is the third <section> rendered inside the page.
+   On phones it must never become an invisible scroll gap while its
+   entrance animation is waiting for a trigger.
+
+   Mobile layout is allowed to remain fully visible. Desktop keeps
+   its existing ScrollTrigger animation because this rule is mobile
+   only.
+   ========================================================= */
+
+@media (max-width: 900px) {
+  #smooth-content > main > section:nth-of-type(3) {
+    position: relative !important;
+
+    width: 100% !important;
+
+    height: auto !important;
+
+    min-height: 100svh !important;
+
+    overflow: visible !important;
+  }
+
+  #smooth-content > main > section:nth-of-type(3) > * {
+    position: relative !important;
+
+    width: 100% !important;
+
+    height: auto;
+
+    min-height: 0;
+
+    overflow: visible !important;
+  }
+
+  #smooth-content > main > section:nth-of-type(3) * {
+    visibility: visible !important;
+  }
+}
+
+/* ==========================================================
+   MOBILE — SINGLE NATIVE DOCUMENT SCROLLER
+   ========================================================== */
+
+@media (max-width: 900px) {
+  html,
+  body {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    height: auto !important;
+    min-height: 100%;
+  }
+
+  main {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+  }
+
+  #smooth-wrapper,
+  .smooth-wrapper,
+  #smooth-content,
+  .smooth-content {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
+}

@@ -12,24 +12,36 @@ import {
 gsap.registerPlugin(ScrollTrigger);
 
 export default function InfrastructureSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const stageRef = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLDivElement>(null);
-  const pointsRef = useRef<HTMLDivElement>(null);
-  const scenesRef = useRef<HTMLDivElement>(null);
+  const sectionRef =
+    useRef<HTMLElement>(null);
+
+  const stageRef =
+    useRef<HTMLDivElement>(null);
+
+  const labelRef =
+    useRef<HTMLDivElement>(null);
+
+  const pointsRef =
+    useRef<HTMLDivElement>(null);
+
+  const scenesRef =
+    useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
-    const section = sectionRef.current;
-    const stage = stageRef.current;
+    const section =
+      sectionRef.current;
 
-    if (!section || !stage) return;
+    const stage =
+      stageRef.current;
 
-    const mm = gsap.matchMedia();
+    if (!section || !stage) {
+      return;
+    }
 
-
-  /* ========================================================
-     DESKTOP
-     ======================================================== */
+    const ctx =
+      gsap.context(() => {
+        const mm =
+          gsap.matchMedia();
 
   mm.add("(min-width: 901px)", () => {
     const label = labelRef.current;
@@ -463,569 +475,366 @@ export default function InfrastructureSection() {
 
   });
 
-  mm.add("(max-width: 900px)", () => {
-    const label = labelRef.current;
-    const points = pointsRef.current;
-    const scenes = scenesRef.current;
+      /*
+       * ----------------------------------------------------------
+       * MOBILE
+       * ----------------------------------------------------------
+       *
+       * Mobile uses normal document flow.
+       *
+       * There is no mobile pin, sticky stage, fixed story track,
+       * or whole-scene opacity animation. Every scene remains a
+       * real document block and only its internal elements animate.
+       */
+      mm.add("(max-width: 900px)", () => {
+        const label = labelRef.current;
+        const points = pointsRef.current;
+        const scenes = scenesRef.current;
 
-    if (!label || !points || !scenes) {
-      return;
-    }
+        if (!label || !points || !scenes) {
+          return;
+        }
 
-    const pointItems = Array.from(
-      points.querySelectorAll<HTMLElement>(
-        "[data-about-point]"
-      )
-    );
-
-    const sceneItems = Array.from(
-      scenes.querySelectorAll<HTMLElement>(
-        "[data-about-scene]"
-      )
-    );
-
-    if (
-      pointItems.length !== sceneItems.length ||
-      sceneItems.length === 0
-    ) {
-      return;
-    }
-
-    const sceneParts = sceneItems.map((scene) => ({
-      scene,
-      copy: scene.querySelector<HTMLElement>(
-        ".about-copy"
-      ),
-      heading: scene.querySelector<HTMLElement>(
-        ".about-heading"
-      ),
-      button: scene.querySelector<HTMLElement>(
-        ".about-button"
-      ),
-      image: scene.querySelector<HTMLElement>(
-        ".about-image-left"
-      ),
-      sideLabel: scene.querySelector<HTMLElement>(
-        ".about-side-label"
-      ),
-    }));
-
-    /*
-     * ==========================================================
-     * MOBILE ABOUT STORY
-     * ==========================================================
-     *
-     * The About stage is pinned only on mobile.
-     *
-     * The 01 / 02 / 03 indicator stays at the top of the stage
-     * while the content below it changes with the user's scroll.
-     *
-     * The indicator and scene transitions are controlled by the
-     * SAME master timeline, keeping them perfectly synchronized.
-     *
-     * The secondary image is not part of the mobile story.
-     */
-
-    gsap.set(label, {
-      autoAlpha: 0,
-      y: 12,
-    });
-
-    gsap.set(pointItems, {
-      autoAlpha: 0.3,
-      y: 0,
-      scale: 1,
-      transformOrigin: "center left",
-    });
-
-    gsap.set(pointItems[0], {
-      autoAlpha: 1,
-      scale: 1,
-    });
-
-    gsap.set(sceneItems, {
-      autoAlpha: 0,
-      x: 0,
-      y: 0,
-      scale: 1,
-      zIndex: 1,
-    });
-
-    gsap.set(sceneItems[0], {
-      autoAlpha: 1,
-      zIndex: 3,
-    });
-
-    sceneParts.forEach((parts, index) => {
-      const copyParts = [
-        parts.copy,
-        parts.heading,
-        parts.button,
-      ].filter(Boolean) as HTMLElement[];
-
-      const imageParts = [
-        parts.image,
-      ].filter(Boolean) as HTMLElement[];
-
-      const sideParts = [
-        parts.sideLabel,
-      ].filter(Boolean) as HTMLElement[];
-
-      if (index === 0) {
-        gsap.set(copyParts, {
-          autoAlpha: 1,
-          x: 0,
-          y: 0,
-        });
-
-        gsap.set(imageParts, {
-          autoAlpha: 1,
-          x: 0,
-          y: 0,
-          scale: 1,
-        });
-
-        gsap.set(sideParts, {
-          autoAlpha: 1,
-          x: 0,
-          y: 0,
-        });
-
-        return;
-      }
-
-      gsap.set(copyParts, {
-        autoAlpha: 0,
-        x: 24,
-        y: 10,
-      });
-
-      gsap.set(imageParts, {
-        autoAlpha: 0,
-        x: 34,
-        y: 10,
-        scale: 0.96,
-      });
-
-      gsap.set(sideParts, {
-        autoAlpha: 0,
-        x: 22,
-        y: 8,
-      });
-    });
-
-    const activatePoint = (
-      index: number,
-      ping = false
-    ) => {
-      pointItems.forEach((item, itemIndex) => {
-        gsap.to(
-          item,
-          {
-            autoAlpha:
-              itemIndex === index
-                ? 1
-                : 0.3,
-
-            scale:
-              itemIndex === index
-                ? 1
-                : 0.98,
-
-            duration: 0.2,
-            ease: "power2.out",
-            overwrite: true,
-          }
+        const pointItems = Array.from(
+          points.querySelectorAll<HTMLElement>(
+            "[data-about-point]"
+          )
         );
-      });
 
-      if (ping && pointItems[index]) {
-        gsap.fromTo(
-          pointItems[index],
-          {
-            scale: 0.96,
-          },
-          {
-            scale: 1.08,
-            duration: 0.14,
-            ease: "power2.out",
-            yoyo: true,
-            repeat: 1,
-            overwrite: true,
-          }
+        const sceneItems = Array.from(
+          scenes.querySelectorAll<HTMLElement>(
+            "[data-about-scene]"
+          )
         );
-      }
-    };
-
-    const tl = gsap.timeline({
-      defaults: {
-        ease: "none",
-      },
-
-      scrollTrigger: {
-        trigger: stage,
-
-        start: "top top",
 
         /*
-         * Enough physical scroll distance for:
+         * MOBILE ARCHITECTURE
+         * --------------------------------------------------------
+         * Every About chapter stays in normal document flow.
+         * Nothing is pinned, sticky, fixed, or hidden as a whole.
          *
-         *   01 hold
-         *   01 → 02
-         *   02 hold
-         *   02 → 03
-         *   03 hold
+         * The chapter reveal alternates horizontally:
+         *
+         *   01  -> enters from LEFT  -> center -> exits LEFT
+         *   02  -> enters from RIGHT -> center -> exits RIGHT
+         *   03  -> enters from LEFT  -> center -> exits LEFT
+         *
+         * Because the animation is scrubbed by ScrollTrigger, the
+         * movement reverses naturally when the user scrolls upward.
+         * This gives the mobile section the same physical feeling as
+         * the intro without creating artificial blank scroll space.
          */
-        end: () =>
-          `+=${Math.round(
-            window.innerHeight * 3.6
-          )}`,
 
-        pin: true,
-        pinSpacing: true,
+        gsap.set(label, {
+          autoAlpha: 0.65,
+          y: 18,
+        });
 
-        scrub: true,
-
-        anticipatePin: 1,
-
-        invalidateOnRefresh: true,
-
-        fastScrollEnd: false,
-
-        refreshPriority: 10,
-
-        onUpdate: () => {
-          const time = tl.time();
-
-          const scene01 =
-            tl.labels.scene01;
-
-          const scene02 =
-            tl.labels.scene02;
-
-          const scene03 =
-            tl.labels.scene03;
-
-          let activeIndex = 0;
-
-          if (
-            time >=
-            (scene02 + scene03) / 2
-          ) {
-            activeIndex = 2;
-          } else if (
-            time >=
-            (scene01 + scene02) / 2
-          ) {
-            activeIndex = 1;
-          }
-
-          const previousIndex =
-            Number(
-              section.dataset.aboutActiveIndex ??
-                "0"
-            );
-
-          if (
-            activeIndex !==
-            previousIndex
-          ) {
-            section.dataset.aboutActiveIndex =
-              String(activeIndex);
-
-            activatePoint(
-              activeIndex,
-              true
-            );
-          }
-        },
-      },
-    });
-
-    /*
-     * ----------------------------------------------------------
-     * ABOUT ENTRY
-     * ----------------------------------------------------------
-     */
-
-    tl.to(
-      label,
-      {
-        autoAlpha: 1,
-        y: 0,
-        duration: 0.45,
-        ease: "power3.out",
-      },
-      0
-    );
-
-    tl.addLabel(
-      "scene01",
-      0.45
-    );
-
-    /*
-     * ----------------------------------------------------------
-     * 01 HOLD
-     * ----------------------------------------------------------
-     */
-
-    tl.to(
-      {},
-      {
-        duration: 0.8,
-      }
-    );
-
-    const transitionScene = (
-      currentIndex: number,
-      nextIndex: number
-    ) => {
-      const current =
-        sceneParts[currentIndex];
-
-      const next =
-        sceneParts[nextIndex];
-
-      const currentCopy = [
-        current.copy,
-        current.heading,
-        current.button,
-      ].filter(Boolean) as HTMLElement[];
-
-      const currentImage = [
-        current.image,
-      ].filter(Boolean) as HTMLElement[];
-
-      const currentSide = [
-        current.sideLabel,
-      ].filter(Boolean) as HTMLElement[];
-
-      const nextCopy = [
-        next.copy,
-        next.heading,
-        next.button,
-      ].filter(Boolean) as HTMLElement[];
-
-      const nextImage = [
-        next.image,
-      ].filter(Boolean) as HTMLElement[];
-
-      const nextSide = [
-        next.sideLabel,
-      ].filter(Boolean) as HTMLElement[];
-
-      gsap.set(
-        next.scene,
-        {
-          autoAlpha: 1,
-          x: 24,
-          y: 0,
-          scale: 1.01,
-          zIndex: 4,
-        }
-      );
-
-      /*
-       * OUTGOING
-       */
-
-      tl.to(
-        currentCopy,
-        {
-          autoAlpha: 0,
-          x: -24,
-          y: -8,
-          duration: 0.62,
-          stagger: 0.025,
-          ease: "power2.inOut",
-        }
-      );
-
-      tl.to(
-        currentImage,
-        {
-          autoAlpha: 0,
-          x: -34,
-          y: -5,
-          scale: 0.965,
-          duration: 0.72,
-          ease: "power2.inOut",
-        },
-        "<"
-      );
-
-      tl.to(
-        currentSide,
-        {
-          autoAlpha: 0,
-          x: -20,
-          y: -5,
-          duration: 0.58,
-          ease: "power2.inOut",
-        },
-        "<"
-      );
-
-      /*
-       * INCOMING
-       */
-
-      tl.to(
-        next.scene,
-        {
-          x: 0,
-          y: 0,
-          scale: 1,
-          duration: 0.72,
-          ease: "power3.out",
-        },
-        "<0.08"
-      );
-
-      tl.to(
-        nextImage,
-        {
+        /* The desktop points are hidden on mobile by CSS. */
+        gsap.set(pointItems, {
           autoAlpha: 1,
           x: 0,
           y: 0,
           scale: 1,
-          duration: 0.68,
-          ease: "power3.out",
-        },
-        "<0.04"
-      );
+        });
 
-      tl.to(
-        nextSide,
-        {
+        gsap.set(sceneItems, {
+          clearProps: "visibility,opacity,transform",
+        });
+
+        const triggers: ScrollTrigger[] = [];
+
+        /* --------------------------------------------------------
+           ABOUT HEADER
+           -------------------------------------------------------- */
+
+        const headerTimeline = gsap.timeline({
+          paused: true,
+          defaults: {
+            ease: "power3.out",
+          },
+        });
+
+        headerTimeline.to(label, {
           autoAlpha: 1,
-          x: 0,
           y: 0,
-          duration: 0.5,
-          ease: "power3.out",
-        },
-        "<0.12"
-      );
+          scale: 1,
+          duration: 0.8,
+        });
 
-      tl.to(
-        nextCopy,
-        {
-          autoAlpha: 1,
-          x: 0,
-          y: 0,
-          duration: 0.62,
-          stagger: 0.035,
-          ease: "power3.out",
-        },
-        "<0.08"
-      );
-
-      /*
-       * The active number ping is synchronized with the
-       * visual scene transition.
-       */
-      tl.call(
-        () => {
-          activatePoint(
-            nextIndex,
-            true
-          );
-        },
-        [],
-        "<0.18"
-      );
-
-      tl.set(
-        [
-          next.scene,
-          ...nextCopy,
-          ...nextImage,
-          ...nextSide,
-        ],
-        {
-          clearProps:
-            "x,y,scale",
-        }
-      );
-    };
-
-    /*
-     * ----------------------------------------------------------
-     * 01 → 02
-     * ----------------------------------------------------------
-     */
-
-    transitionScene(0, 1);
-
-    tl.addLabel(
-      "scene02"
-    );
-
-    /*
-     * ----------------------------------------------------------
-     * 02 HOLD
-     * ----------------------------------------------------------
-     */
-
-    tl.to(
-      {},
-      {
-        duration: 0.82,
-      }
-    );
-
-    /*
-     * ----------------------------------------------------------
-     * 02 → 03
-     * ----------------------------------------------------------
-     */
-
-    transitionScene(1, 2);
-
-    tl.addLabel(
-      "scene03"
-    );
-
-    /*
-     * ----------------------------------------------------------
-     * 03 HOLD
-     * ----------------------------------------------------------
-     */
-
-    tl.to(
-      {},
-      {
-        duration: 0.95,
-      }
-    );
-
-    section.dataset.aboutActiveIndex =
-      "0";
-
-    const refresh = () => {
-      ScrollTrigger.refresh();
-    };
-
-    const frame =
-      requestAnimationFrame(() => {
-        requestAnimationFrame(
-          refresh
+        triggers.push(
+          ScrollTrigger.create({
+            trigger: stage,
+            animation: headerTimeline,
+            start: "top 92%",
+            end: "top 58%",
+            scrub: 0.65,
+            invalidateOnRefresh: true,
+          })
         );
+
+        /* --------------------------------------------------------
+           ALTERNATING CHAPTER REVEALS
+           -------------------------------------------------------- */
+
+        sceneItems.forEach((scene, index) => {
+          const copy =
+            scene.querySelector<HTMLElement>(
+              ".about-copy"
+            );
+
+          const heading =
+            scene.querySelector<HTMLElement>(
+              ".about-heading"
+            );
+
+          const button =
+            scene.querySelector<HTMLElement>(
+              ".about-button"
+            );
+
+          const image =
+            scene.querySelector<HTMLElement>(
+              ".about-image-left"
+            );
+
+          const side =
+            scene.querySelector<HTMLElement>(
+              ".about-side"
+            );
+
+          const scenePoint =
+            scene.querySelector<HTMLElement>(
+              ".about-scene-point"
+            );
+
+          const revealItems = [
+            scenePoint,
+            copy,
+            heading,
+            button,
+            image,
+            side,
+          ].filter(Boolean) as HTMLElement[];
+
+          /*
+           * Keep the article itself visible at all times. Only its
+           * internal content moves, so the document can never expose
+           * a blank white chapter because of an opacity/pin failure.
+           */
+          gsap.set(scene, {
+            autoAlpha: 1,
+            clearProps:
+              "visibility,opacity,transform",
+          });
+
+          /*
+           * Even chapter = LEFT -> RIGHT into the center.
+           * Odd chapter  = RIGHT -> LEFT into the center.
+           */
+          const direction =
+            index % 2 === 0 ? -1 : 1;
+
+          const enterX = 110 * direction;
+          const exitX = 110 * direction;
+
+          gsap.set(revealItems, {
+            autoAlpha: 0.12,
+            x: enterX,
+            y: 18,
+            scale: 0.985,
+          });
+
+          const revealTimeline =
+            gsap.timeline({
+              paused: true,
+              defaults: {
+                ease: "power3.out",
+              },
+            });
+
+          /*
+           * ENTER
+           * The complete chapter slides horizontally into place.
+           * The stagger keeps the number, heading, image and side
+           * information connected while still feeling alive.
+           */
+          revealTimeline.to(
+            revealItems,
+            {
+              autoAlpha: 1,
+              x: 0,
+              y: 0,
+              scale: 1,
+              duration: 0.48,
+              stagger: 0.045,
+              ease: "power3.out",
+            },
+            0.08
+          );
+
+          /*
+           * HOLD
+           * The chapter remains centered while it occupies the main
+           * part of the viewport.
+           */
+          revealTimeline.to(
+            revealItems,
+            {
+              autoAlpha: 1,
+              x: 0,
+              y: 0,
+              scale: 1,
+              duration: 0.72,
+              ease: "none",
+            },
+            0.56
+          );
+
+          /*
+           * EXIT
+           * It leaves through the same side it entered from. When the
+           * user scrolls upward, this entire sequence reverses, so the
+           * chapter comes back from that same side smoothly.
+           */
+          revealTimeline.to(
+            revealItems,
+            {
+              autoAlpha: 0.12,
+              x: exitX,
+              y: 18,
+              scale: 0.985,
+              duration: 0.48,
+              stagger: 0.035,
+              ease: "power2.in",
+            },
+            1.28
+          );
+
+          const trigger =
+            ScrollTrigger.create({
+              trigger: scene,
+              animation: revealTimeline,
+
+              /*
+               * Use the actual chapter bounds. There is no pin and no
+               * artificial viewport-sized spacer.
+               */
+              start: "top 94%",
+              end: "bottom 10%",
+
+              scrub: 0.72,
+
+              invalidateOnRefresh: true,
+              fastScrollEnd: false,
+            });
+
+          triggers.push(trigger);
+
+          /* ------------------------------------------------------
+             IMAGE DEPTH
+             ------------------------------------------------------ */
+
+          if (image) {
+            const imageMotion =
+              gsap.fromTo(
+                image,
+                {
+                  y: 10,
+                  scale: 1.01,
+                },
+                {
+                  y: -10,
+                  scale: 1.025,
+                  ease: "none",
+                }
+              );
+
+            triggers.push(
+              ScrollTrigger.create({
+                trigger: scene,
+                animation: imageMotion,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 0.8,
+                invalidateOnRefresh: true,
+              })
+            );
+          }
+        });
+
+        /* --------------------------------------------------------
+           REFRESH AFTER MOBILE LAYOUT / IMAGES SETTLE
+           -------------------------------------------------------- */
+
+        const refresh = () => {
+          ScrollTrigger.refresh();
+        };
+
+        const frame =
+          requestAnimationFrame(() => {
+            requestAnimationFrame(refresh);
+          });
+
+        const handleLoad = () => {
+          requestAnimationFrame(refresh);
+        };
+
+        window.addEventListener(
+          "load",
+          handleLoad,
+          { once: true }
+        );
+
+        const observer =
+          new ResizeObserver(refresh);
+
+        observer.observe(stage);
+
+        sceneItems.forEach((scene) => {
+          const image =
+            scene.querySelector<HTMLImageElement>(
+              "img"
+            );
+
+          if (image) {
+            if (image.complete) {
+              refresh();
+            } else {
+              image.addEventListener(
+                "load",
+                refresh,
+                { once: true }
+              );
+            }
+          }
+        });
+
+        return () => {
+          cancelAnimationFrame(frame);
+
+          window.removeEventListener(
+            "load",
+            handleLoad
+          );
+
+          observer.disconnect();
+
+          triggers.forEach((trigger) => {
+            trigger.kill();
+          });
+        };
       });
+      return () => {
+        mm.revert();
+      };
+      }, sectionRef);
 
     return () => {
-      cancelAnimationFrame(frame);
-      tl.scrollTrigger?.kill();
-      tl.kill();
-    };
-  });
-
-
-    return () => {
-      mm.revert();
+      ctx.revert();
     };
   }, []);
+
 
   return (
     <section
@@ -1093,6 +902,21 @@ export default function InfrastructureSection() {
                 data-about-scene
                 className="about-scene"
               >
+
+                {/* MOBILE CHAPTER POINT */}
+
+                <div
+                  className="about-scene-point"
+                  data-about-scene-point
+                >
+                  <span className="about-point-number">
+                    {point.number}
+                  </span>
+
+                  <p>
+                    {point.text}
+                  </p>
+                </div>
 
                 {/* LEFT IMAGE */}
 

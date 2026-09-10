@@ -12,33 +12,43 @@ import styles from "./ScaleSystems.module.css";
 gsap.registerPlugin(ScrollTrigger);
 
 export default function ScaleSystems() {
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const stageRef = useRef<HTMLDivElement | null>(null);
-  const headingRef = useRef<HTMLHeadingElement | null>(null);
-  const introRef = useRef<HTMLParagraphElement | null>(null);
-  const panelsRef = useRef<HTMLDivElement | null>(null);
+  const sectionRef =
+    useRef<HTMLElement | null>(null);
+
+  const stageRef =
+    useRef<HTMLDivElement | null>(null);
+
+  const headingRef =
+    useRef<HTMLHeadingElement | null>(null);
+
+  const introRef =
+    useRef<HTMLParagraphElement | null>(null);
+
+  const panelsRef =
+    useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
-    const section = sectionRef.current;
-    const stage = stageRef.current;
-    const panelsStage = panelsRef.current;
+    const section =
+      sectionRef.current;
 
-    if (!section || !stage || !panelsStage) {
+    const stage =
+      stageRef.current;
+
+    const panelsStage =
+      panelsRef.current;
+
+    if (
+      !section ||
+      !stage ||
+      !panelsStage
+    ) {
       return;
     }
 
-    const ctx = gsap.context(() => {
-      const mm = gsap.matchMedia();
-
-      /*
-       * ==========================================================
-       * DESKTOP
-       * ==========================================================
-       *
-       * The desktop composition remains the editorial multi-panel
-       * experience. Every visual element is controlled by one
-       * master timeline.
-       */
+    const ctx =
+      gsap.context(() => {
+        const mm =
+          gsap.matchMedia();
 
       mm.add("(min-width: 901px)", () => {
         const heading = headingRef.current;
@@ -324,51 +334,23 @@ export default function ScaleSystems() {
           fastScrollEnd: false,
         });
 
-        const refresh = () => {
-          ScrollTrigger.refresh();
-        };
-
-        const frame = requestAnimationFrame(() => {
-          requestAnimationFrame(refresh);
-        });
-
-        const observer = new ResizeObserver(refresh);
-        observer.observe(section);
-
         return () => {
-          cancelAnimationFrame(frame);
-          observer.disconnect();
           trigger.kill();
           tl.kill();
         };
       });
 
       /*
-       * ==========================================================
-       * MOBILE — IMMERSIVE CHAPTER SCROLL
-       * ==========================================================
+       * ----------------------------------------------------------
+       * MOBILE
+       * ----------------------------------------------------------
        *
-       * Mobile intentionally uses a different composition.
+       * Mobile is a normal document-flow story.
        *
-       * The section becomes a single viewport-sized storytelling
-       * stage. The user scrolls through four chapters while the
-       * stage stays pinned.
-       *
-       * Each chapter is a full-screen editorial card:
-       *
-       *   giant number
-       *   chapter label
-       *   image
-       *   title
-       *   description
-       *
-       * One GSAP timeline controls every chapter. There is no React
-       * active state, no individual ScrollTrigger per card and no
-       * competing animation system.
-       *
-       * Scroll direction automatically reverses the entire timeline.
+       * Every chapter is a real block in the document. There is
+       * deliberately no mobile pin, sticky stage, fixed track or
+       * absolute panel stack.
        */
-
       mm.add("(max-width: 900px)", () => {
         const heading = headingRef.current;
         const intro = introRef.current;
@@ -377,446 +359,293 @@ export default function ScaleSystems() {
           return;
         }
 
-        const panels = Array.from(
-          panelsStage.querySelectorAll<HTMLElement>(
-            `.${styles.panel}`
-          )
-        );
+        const panels =
+          Array.from(
+            panelsStage.querySelectorAll<HTMLElement>(
+              `.${styles.panel}`
+            )
+          );
 
-        if (
-          panels.length !== scaleSystemsData.length ||
-          panels.length === 0
-        ) {
+        if (!panels.length) {
           return;
         }
 
-        const panelData = panels.map((panel) => ({
-          panel,
-          number:
-            panel.querySelector<HTMLElement>(
-              `.${styles.giantNumber}`
-            ),
-          label:
-            panel.querySelector<HTMLElement>(
-              `.${styles.panelLabel}`
-            ),
-          index:
-            panel.querySelector<HTMLElement>(
-              `.${styles.panelIndex}`
-            ),
-          card:
-            panel.querySelector<HTMLElement>(
-              `.${styles.card}`
-            ),
-          image:
-            panel.querySelector<HTMLElement>(
-              `.${styles.cardImage}`
-            ),
-          content:
-            panel.querySelector<HTMLElement>(
-              `.${styles.cardContent}`
-            ),
-        }));
-
-        if (
-          panelData.some(
-            (item) =>
-              !item.number ||
-              !item.label ||
-              !item.index ||
-              !item.card ||
-              !item.image ||
-              !item.content
-          )
-        ) {
-          return;
-        }
-
-        const safeData = panelData as Array<{
-          panel: HTMLElement;
-          number: HTMLElement;
-          label: HTMLElement;
-          index: HTMLElement;
-          card: HTMLElement;
-          image: HTMLElement;
-          content: HTMLElement;
-        }>;
+        const triggers: ScrollTrigger[] = [];
 
         /*
-         * ----------------------------------------------------------
-         * INITIAL STATES
-         * ----------------------------------------------------------
+         * The header has its own smooth scroll-driven entrance.
          */
-
         gsap.set(
           [heading, intro],
           {
-            autoAlpha: 0,
-            y: 24,
+            autoAlpha: 0.55,
+            y: 20,
           }
         );
 
-        gsap.set(
-          panels,
-          {
-            position: "absolute",
-            inset: 0,
-            autoAlpha: 0,
-            yPercent: 12,
-            scale: 0.965,
-            zIndex: 1,
-          }
-        );
-
-        safeData.forEach((item, index) => {
-          gsap.set(item.number, {
-            autoAlpha:
-              index === 0 ? 1 : 0,
-            yPercent:
-              index === 0 ? 0 : 12,
-            scale:
-              index === 0 ? 1 : 1.08,
+        const headerTimeline =
+          gsap.timeline({
+            paused: true,
+            defaults: {
+              ease: "power3.out",
+            },
           });
 
-          gsap.set(item.label, {
-            autoAlpha:
-              index === 0 ? 1 : 0,
-            y: index === 0 ? 0 : 12,
-          });
-
-          gsap.set(item.index, {
-            autoAlpha:
-              index === 0 ? 0.65 : 0.28,
-          });
-
-          gsap.set(item.card, {
-            yPercent:
-              index === 0 ? 0 : 105,
-            scale:
-              index === 0 ? 1 : 0.985,
-          });
-
-          gsap.set(item.image, {
-            scale:
-              index === 0 ? 1 : 1.08,
-          });
-
-          gsap.set(item.content, {
-            autoAlpha:
-              index === 0 ? 1 : 0,
-            y:
-              index === 0 ? 0 : 20,
-          });
-        });
-
-        gsap.set(panels[0], {
-          autoAlpha: 1,
-          yPercent: 0,
-          scale: 1,
-          zIndex: 5,
-        });
-
-        /*
-         * ----------------------------------------------------------
-         * MOBILE MASTER TIMELINE
-         * ----------------------------------------------------------
-         *
-         * Every chapter transition has the same structure:
-         *
-         *   1. Current chapter lifts/fades.
-         *   2. Giant number follows that movement.
-         *   3. Next image rises from below.
-         *   4. Next image settles with a subtle scale.
-         *   5. Next number and label appear.
-         *   6. Next card copy settles.
-         *
-         * The number and image therefore never have separate
-         * scroll triggers. They are literally the same timeline.
-         */
-
-        const tl = gsap.timeline({
-          paused: true,
-          defaults: {
-            ease: "none",
-          },
-        });
-
-        tl.to(
+        headerTimeline.to(
           heading,
           {
             autoAlpha: 1,
             y: 0,
-            duration: 0.55,
-            ease: "power3.out",
-          },
-          0
+            duration: 0.85,
+          }
         );
 
-        tl.to(
+        headerTimeline.to(
           intro,
           {
             autoAlpha: 1,
             y: 0,
-            duration: 0.5,
-            ease: "power3.out",
+            duration: 0.72,
           },
-          0.08
+          "<0.14"
         );
 
-        /*
-         * Give the first chapter a little time to breathe.
-         */
-        tl.to({}, { duration: 0.75 });
+        triggers.push(
+          ScrollTrigger.create({
+            trigger: section,
+            animation: headerTimeline,
 
-        safeData.forEach((current, index) => {
-          if (index === safeData.length - 1) {
-            return;
-          }
+            start: "top 86%",
+            end: "top 46%",
 
-          const next = safeData[index + 1];
-          const start =
-            tl.duration() + 0.05;
+            scrub: 0.7,
 
-          /*
-           * Bring the next panel above the current one.
-           */
-          tl.set(
-            next.panel,
-            {
-              autoAlpha: 1,
-              zIndex: 6,
-            },
-            start
-          );
+            invalidateOnRefresh: true,
 
-          /*
-           * Current chapter exits upward.
-           */
-          tl.to(
-            current.panel,
-            {
-              yPercent: -9,
-              scale: 0.975,
-              autoAlpha: 0.42,
-              duration: 0.78,
-              ease: "power3.inOut",
-            },
-            start
-          );
-
-          tl.to(
-            current.number,
-            {
-              yPercent: -15,
-              scale: 0.93,
-              autoAlpha: 0.18,
-              duration: 0.72,
-              ease: "power3.inOut",
-            },
-            start
-          );
-
-          tl.to(
-            current.label,
-            {
-              y: -12,
-              autoAlpha: 0.18,
-              duration: 0.55,
-              ease: "power3.inOut",
-            },
-            start
-          );
-
-          tl.to(
-            current.content,
-            {
-              y: -18,
-              autoAlpha: 0,
-              duration: 0.58,
-              ease: "power3.inOut",
-            },
-            start
-          );
-
-          /*
-           * Next panel starts slightly below the viewport.
-           */
-          tl.fromTo(
-            next.panel,
-            {
-              yPercent: 10,
-              scale: 0.965,
-            },
-            {
-              yPercent: 0,
-              scale: 1,
-              duration: 0.9,
-              ease: "power4.out",
-            },
-            start
-          );
-
-          /*
-           * The IMAGE is the main movement.
-           * It rises from the bottom like a physical surface.
-           */
-          tl.to(
-            next.card,
-            {
-              yPercent: 0,
-              scale: 1,
-              duration: 0.92,
-              ease: "power4.out",
-            },
-            start
-          );
-
-          tl.to(
-            next.image,
-            {
-              scale: 1,
-              duration: 1.05,
-              ease: "power2.out",
-            },
-            start + 0.02
-          );
-
-          /*
-           * Giant number appears with the image rather than
-           * waiting for the card transition to finish.
-           */
-          tl.to(
-            next.number,
-            {
-              yPercent: 0,
-              scale: 1,
-              autoAlpha: 1,
-              duration: 0.68,
-              ease: "power3.out",
-            },
-            start + 0.13
-          );
-
-          tl.to(
-            next.label,
-            {
-              y: 0,
-              autoAlpha: 1,
-              duration: 0.55,
-              ease: "power3.out",
-            },
-            start + 0.22
-          );
-
-          tl.to(
-            next.index,
-            {
-              autoAlpha: 0.65,
-              duration: 0.4,
-              ease: "power2.out",
-            },
-            start + 0.24
-          );
-
-          tl.to(
-            next.content,
-            {
-              y: 0,
-              autoAlpha: 1,
-              duration: 0.62,
-              ease: "power3.out",
-            },
-            start + 0.29
-          );
-
-          /*
-           * A short editorial hold after every chapter.
-           */
-          tl.to(
-            {},
-            {
-              duration: 0.7,
-            }
-          );
-
-          /*
-           * Keep the previous panel underneath the next one.
-           */
-          tl.set(
-            current.panel,
-            {
-              zIndex: 1,
-            }
-          );
-        });
-
-        /*
-         * Final breathing room before the pin releases.
-         */
-        tl.to(
-          {},
-          {
-            duration: 0.8,
-          }
+            fastScrollEnd: false,
+          })
         );
 
-        /*
-         * ----------------------------------------------------------
-         * MOBILE SCROLL TRIGGER
-         * ----------------------------------------------------------
-         *
-         * The stage itself is pinned.
-         *
-         * One pixel of scroll corresponds to one point in the
-         * master timeline, so all visual layers remain synchronized.
-         */
-        const trigger = ScrollTrigger.create({
-          id: "scale-systems-mobile-story",
-          trigger: section,
-          pin: stage,
-          pinSpacing: true,
-          start: "top top",
-          end: () =>
-            `+=${Math.round(
-              window.innerHeight *
-                (3.45)
-            )}`,
-          animation: tl,
-          scrub: 0.45,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          fastScrollEnd: false,
-          refreshPriority: 2,
-        });
+        panels.forEach(
+          (panel, index) => {
+            const number =
+              panel.querySelector<HTMLElement>(
+                `.${styles.giantNumber}`
+              );
+
+            const label =
+              panel.querySelector<HTMLElement>(
+                `.${styles.panelLabel}`
+              );
+
+            const panelIndex =
+              panel.querySelector<HTMLElement>(
+                `.${styles.panelIndex}`
+              );
+
+            const card =
+              panel.querySelector<HTMLElement>(
+                `.${styles.card}`
+              );
+
+            const image =
+              panel.querySelector<HTMLElement>(
+                `.${styles.cardImage}`
+              );
+
+            const content =
+              panel.querySelector<HTMLElement>(
+                `.${styles.cardContent}`
+              );
+
+            const items = [
+              number,
+              label,
+              panelIndex,
+              card,
+              content,
+            ].filter(Boolean) as HTMLElement[];
+
+            /*
+             * Never hide the panel itself.
+             */
+            gsap.set(panel, {
+              autoAlpha: 1,
+              clearProps:
+                "opacity,visibility,transform",
+            });
+
+            gsap.set(items, {
+              autoAlpha: 0.55,
+              y: 24,
+              scale: 0.985,
+            });
+
+            if (index === 0) {
+              gsap.set(items, {
+                autoAlpha: 1,
+                y: 0,
+                scale: 1,
+              });
+            }
+
+            const timeline =
+              gsap.timeline({
+                paused: true,
+                defaults: {
+                  ease: "power3.out",
+                },
+              });
+
+            if (number) {
+              timeline.to(
+                number,
+                {
+                  autoAlpha: 1,
+                  y: 0,
+                  scale: 1,
+                  duration: 0.8,
+                },
+                0
+              );
+            }
+
+            timeline.to(
+              [label, panelIndex].filter(
+                Boolean
+              ) as HTMLElement[],
+              {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.65,
+                stagger: 0.05,
+              },
+              0.08
+            );
+
+            if (card) {
+              timeline.to(
+                card,
+                {
+                  autoAlpha: 1,
+                  y: 0,
+                  scale: 1,
+                  duration: 0.9,
+                },
+                0.12
+              );
+            }
+
+            if (content) {
+              timeline.to(
+                content,
+                {
+                  autoAlpha: 1,
+                  y: 0,
+                  duration: 0.68,
+                },
+                0.26
+              );
+            }
+
+            triggers.push(
+              ScrollTrigger.create({
+                trigger: panel,
+                animation: timeline,
+
+                start: "top 90%",
+                end: "top 34%",
+
+                scrub: 0.7,
+
+                invalidateOnRefresh: true,
+
+                fastScrollEnd: false,
+              })
+            );
+
+            /*
+             * Gentle image depth movement.
+             */
+            if (image) {
+              const imageMotion =
+                gsap.fromTo(
+                  image,
+                  {
+                    scale: 1.02,
+                    yPercent: 1,
+                  },
+                  {
+                    scale: 1.075,
+                    yPercent: -1,
+                    ease: "none",
+                  }
+                );
+
+              triggers.push(
+                ScrollTrigger.create({
+                  trigger: panel,
+                  animation: imageMotion,
+
+                  start: "top bottom",
+                  end: "bottom top",
+
+                  scrub: 0.9,
+
+                  invalidateOnRefresh: true,
+                })
+              );
+            }
+          }
+        );
 
         const refresh = () => {
           ScrollTrigger.refresh();
         };
 
-        const frame = requestAnimationFrame(() => {
-          requestAnimationFrame(refresh);
-        });
+        const frame =
+          requestAnimationFrame(() => {
+            requestAnimationFrame(refresh);
+          });
 
-        const observer = new ResizeObserver(refresh);
+        const observer =
+          new ResizeObserver(refresh);
+
         observer.observe(section);
+
+        window.addEventListener(
+          "load",
+          refresh
+        );
 
         return () => {
           cancelAnimationFrame(frame);
+
           observer.disconnect();
-          trigger.kill();
-          tl.kill();
+
+          window.removeEventListener(
+            "load",
+            refresh
+          );
+
+          triggers.forEach(
+            (trigger) => {
+              trigger.kill();
+            }
+          );
         };
       });
 
       return () => {
         mm.revert();
       };
-    }, sectionRef);
+      }, sectionRef);
 
     return () => {
       ctx.revert();
     };
   }, []);
+
 
   return (
     <section

@@ -327,18 +327,29 @@ export default function Navbar() {
           }
         );
 
+        /*
+         * ==========================================================
+         * MOBILE MENU ICON — TRUE HAMBURGER STATE
+         * ==========================================================
+         *
+         * Keep the two bars separated vertically in the closed
+         * state. They will meet at the exact center while rotating
+         * into the X.
+         * ==========================================================
+         */
+
         gsap.set(lineOne, {
           transformOrigin:
             "center center",
           rotation: 0,
-          y: 0,
+          y: -3,
         });
 
         gsap.set(lineTwo, {
           transformOrigin:
             "center center",
           rotation: 0,
-          y: 0,
+          y: 3,
         });
 
         /*
@@ -403,8 +414,8 @@ export default function Navbar() {
             lineOne,
             {
               rotation: 45,
-              y: 4,
-              duration: 0.28,
+              y: 0,
+              duration: 0.42,
               ease: "power3.inOut",
             },
             0
@@ -413,8 +424,8 @@ export default function Navbar() {
             lineTwo,
             {
               rotation: -45,
-              y: -4,
-              duration: 0.28,
+              y: 0,
+              duration: 0.42,
               ease: "power3.inOut",
             },
             0
@@ -736,7 +747,7 @@ export default function Navbar() {
         }
         className="relative z-[60] ml-auto flex h-[34px] w-[42px] items-center justify-center rounded-[9px] bg-white md:hidden"
       >
-        <span className="relative flex h-[14px] w-[17px] items-center justify-center">
+        <span className="relative flex h-[16px] w-[18px] items-center justify-center">
           <span
             ref={menuLineOneRef}
             className="absolute h-[1.5px] w-[17px] rounded-full bg-black"
